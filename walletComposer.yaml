@@ -1,0 +1,27 @@
+version: '3.0'
+services:
+        backend:
+                image: 'mywallet'
+                container_name: backend_mywallet
+                ports:
+                        - 8080:8080
+                depends_on:
+                        - postgres
+                environment:
+                        - DB_SERVER=database_mywallet
+                        - SPRING_DATASOURCE_USERNAME=postgres
+                        - SPRING_DATASOURCE_PASSWORD=teste123
+                        - SPRING_JPA_HIBERNATE_DDL_AUTO=update
+        postgres:
+                container_name: database_mywallet
+                image: 'postgres:13.3-alpine'
+                ports:
+                        - 5433:5432
+                volumes:
+                        - /home/wilsonmyWallet:/var/lib/postgresql/data
+                environment:
+                        POSTGRES_USER: postgres
+                        POSTGRES_PASSWORD: teste123
+                        POSTGRES_DB: myWallet
+
+
