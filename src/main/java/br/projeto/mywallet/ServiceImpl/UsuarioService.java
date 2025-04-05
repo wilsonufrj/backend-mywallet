@@ -1,5 +1,6 @@
 package br.projeto.mywallet.ServiceImpl;
 
+import br.projeto.mywallet.DTO.LoginDTO;
 import br.projeto.mywallet.DTO.UsuarioDTO;
 import br.projeto.mywallet.Mappers.UsuarioMapper;
 import br.projeto.mywallet.Model.Usuario;
@@ -24,28 +25,12 @@ public class UsuarioService implements IUsuarioService {
     @Override
     public UsuarioDTO criarUsuario(UsuarioDTO usuarioDTO) {
 
-        usuarioDTO.setCarteiras(new HashSet<>());
-
         Usuario usuario = usuarioMapper.toEntity(usuarioDTO);
+        usuario.setCarteiras(new HashSet<>());
 
         return usuarioMapper
                 .toDTO(usuarioRepository.save(usuario));
     }
-//
-//    @Override
-//    public UsuarioDTO atualizarUsuario(Long id, UsuarioDTO usuarioAtualizado) {
-//
-//        UsuarioDTO usuarioDTO = buscarPorId(id);
-//
-//        usuarioDTO.setNome(usuarioAtualizado.getNome());
-//        usuarioDTO.setDataNascimento(usuarioAtualizado.getDataNascimento());
-//        usuarioDTO.setEmail(usuarioAtualizado.getEmail());
-//        usuarioDTO.setSenha(usuarioAtualizado.getSenha());
-//        usuarioDTO.setCarteiras(usuarioAtualizado.getCarteiras());
-//
-//        return usuarioMapper
-//                .toDTO(usuarioRepository.save(usuarioMapper.toEntity(usuarioDTO)));
-//    }
 
     @Override
     public void deletarUsuario(Long id) {
@@ -73,12 +58,12 @@ public class UsuarioService implements IUsuarioService {
     }
 
     @Override
-    public UsuarioDTO login(UsuarioDTO usuarioDTO) throws Exception {
+    public UsuarioDTO login(LoginDTO loginDTO) throws Exception {
         
         return usuarioRepository.findAll()
                 .stream()
-                .filter(usuario -> usuario.getNome().equals(usuarioDTO.getNome())
-                        && usuario.getSenha().equals(usuarioDTO.getSenha()))
+                .filter(usuario -> usuario.getNome().equals(loginDTO.getNome())
+                        && usuario.getSenha().equals(loginDTO.getSenha()))
                 .findFirst()
                 .map(usuarioMapper::toDTO)
                 .orElseThrow(()-> new Exception("Usuario não encontrado"));

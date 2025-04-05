@@ -60,7 +60,7 @@ public class CarteiraService implements ICarteiraService {
         carteira.setUsuarios(usuarios);
 
         LocalDate dataAtual = LocalDate.now();
-        carteira.setMeses(List.of(new Mes(dataAtual.getMonth().name(),dataAtual.getYear(),carteira,new ArrayList<>())));
+        carteira.setMeses(List.of(new Mes(dataAtual.getMonth().name(), dataAtual.getYear(), carteira, new ArrayList<>())));
 
 
         return carteiraMapper.toDTO(carteiraRepository.save(carteira));
@@ -68,9 +68,9 @@ public class CarteiraService implements ICarteiraService {
 
 
     @Override
-    public void deletarCarteira(Long id) throws Exception{
+    public void deletarCarteira(Long id) throws Exception {
         Carteira carteira = carteiraRepository.findById(id)
-                .orElseThrow(()-> new Exception("Usuario não encontrado"));
+                .orElseThrow(() -> new Exception("Usuario não encontrado"));
 
         Set<Usuario> usuarios = new HashSet<>(carteira.getUsuarios());
 

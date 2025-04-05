@@ -1,5 +1,6 @@
 package br.projeto.mywallet.Controller;
 
+import br.projeto.mywallet.DTO.LoginDTO;
 import br.projeto.mywallet.DTO.UsuarioDTO;
 import br.projeto.mywallet.Service.IUsuarioService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,7 +22,7 @@ public class UsuarioController {
     }
     
     @PostMapping("/login")
-    public ResponseEntity<UsuarioDTO> loginUsuario(@RequestBody UsuarioDTO usuario) throws Exception{
+    public ResponseEntity<UsuarioDTO> loginUsuario(@RequestBody LoginDTO usuario) throws Exception{
         return ResponseEntity.ok(usuarioService.login(usuario));
     }
 

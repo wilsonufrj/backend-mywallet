@@ -21,7 +21,7 @@ public class Carteira {
             nullable = false)
     private String nome;
 
-    @ManyToMany(cascade = CascadeType.ALL)
+    @ManyToMany(cascade = CascadeType.ALL,fetch = FetchType.LAZY)
     @JoinTable(
             name = "usuario_carteira",
             joinColumns = @JoinColumn(name = "carteira_id"),

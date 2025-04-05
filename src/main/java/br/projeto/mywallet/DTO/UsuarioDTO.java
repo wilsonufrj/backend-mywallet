@@ -1,34 +1,35 @@
 package br.projeto.mywallet.DTO;
 
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
 import java.time.LocalDate;
 import java.util.Set;
 
 /**
- *
  * @author wilsonramos
  */
+
 public class UsuarioDTO {
-    
+
     private Long id;
-   
+
     private String nome;
-    
+
     private LocalDate dataNascimento;
-  
+
     private String email;
-    
-    private String senha;
-    
+
     private Set<CarteiraDTO> carteiras;
     
     public UsuarioDTO(){}
 
-    public UsuarioDTO(Long id, String nome, LocalDate dataNascimento, String email, String senha, Set<CarteiraDTO> carteiras) {
+    public UsuarioDTO(Long id, String nome, LocalDate dataNascimento, String email) {
         this.id = id;
         this.nome = nome;
         this.dataNascimento = dataNascimento;
         this.email = email;
-        this.senha = senha;
         this.carteiras = carteiras;
     }
 
@@ -62,14 +63,6 @@ public class UsuarioDTO {
 
     public void setEmail(String email) {
         this.email = email;
-    }
-
-    public String getSenha() {
-        return senha;
-    }
-
-    public void setSenha(String senha) {
-        this.senha = senha;
     }
 
     public Set<CarteiraDTO> getCarteiras() {

@@ -16,9 +16,7 @@ public class FormaPagamentoDTO {
 
     public FormaPagamentoDTO() {
     }
-    
-    
-    
+
     public FormaPagamentoDTO(Long id, String nome, List<TransacaoDTO> transacoes) {
         this.id = id;
         this.nome = nome;

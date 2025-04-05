@@ -26,6 +26,10 @@ public class MesController {
         return ResponseEntity.ok(mesService.atualizarMes(id, mesDTO));
     }
 
+    public ResponseEntity<MesDTO> selecionaMes(@PathVariable Long id){
+        return ResponseEntity.ok(mesService.buscarPorId(id));
+    }
+
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deletarMes(@PathVariable Long id) {
         mesService.deletarMes(id);

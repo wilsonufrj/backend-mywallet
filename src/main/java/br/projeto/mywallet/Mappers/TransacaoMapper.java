@@ -20,11 +20,11 @@ import org.mapstruct.factory.Mappers;
 public interface TransacaoMapper {
 
     TransacaoMapper INSTANCE = Mappers.getMapper(TransacaoMapper.class);
-    
-   // @Mapping(target = "banco", ignore = true)
+
+    @Mapping(target = "mes", ignore = true)
     TransacaoDTO toDTO(Transacao transacao);
-    
-    @Mapping(target = "banco", ignore = true)
+
+    @Mapping(target = "mes", ignore = true)
     Transacao toEntity(TransacaoDTO transacaoDTO);
 
 }

@@ -69,22 +69,6 @@ public class Mes {
         this.id = id;
     }
 
-    public String getNomeMes() {
-        return nome;
-    }
-
-    public void setNomeMes(String nome) {
-        this.nome = nome;
-    }
-
-    public Integer getAnoMes() {
-        return ano;
-    }
-
-    public void setAnoMes(Integer ano) {
-        this.ano = ano;
-    }
-
     public Carteira getCarteira() {
         return carteira;
     }

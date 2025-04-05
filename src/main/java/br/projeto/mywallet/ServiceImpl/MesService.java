@@ -44,7 +44,6 @@ public class MesService implements IMesService {
 
         mesDTO.setNome(mesAtualizado.getNome());
         mesDTO.setAno(mesAtualizado.getAno());
-        mesDTO.setCarteira(mesAtualizado.getCarteira());
         mesDTO.setTransacoes(mesAtualizado.getTransacoes());
 
         return mesMapper.toDTO(mesRepository.save(mesMapper.toEntity(mesDTO)));

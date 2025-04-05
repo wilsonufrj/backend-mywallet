@@ -33,6 +33,10 @@ public class FormaPagamento {
     )
     private List<Transacao> transacoes;
 
+    public FormaPagamento() {
+
+    }
+
     public FormaPagamento(Long id, String nome, List<Transacao> transacoes) {
         this.id = id;
         this.nome = nome;

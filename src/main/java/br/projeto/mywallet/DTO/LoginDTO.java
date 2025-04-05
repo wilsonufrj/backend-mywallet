@@ -1,19 +1,23 @@
 package br.projeto.mywallet.DTO;
 
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
 /**
- *
  * @author wilsonramos
  */
+
 public class LoginDTO {
     private String nome;
     private String senha;
 
+    public LoginDTO() {
+    }
+
     public LoginDTO(String nome, String senha) {
         this.nome = nome;
         this.senha = senha;
-    }
-
-    public LoginDTO() {
     }
 
     public String getNome() {
@@ -31,6 +35,4 @@ public class LoginDTO {
     public void setSenha(String senha) {
         this.senha = senha;
     }
-    
-    
 }
