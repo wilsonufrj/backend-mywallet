@@ -25,7 +25,7 @@ public class UsuarioDTO {
     
     public UsuarioDTO(){}
 
-    public UsuarioDTO(Long id, String nome, LocalDate dataNascimento, String email) {
+    public UsuarioDTO(Long id, String nome, LocalDate dataNascimento, String email, Set<CarteiraDTO> carteiras) {
         this.id = id;
         this.nome = nome;
         this.dataNascimento = dataNascimento;

@@ -22,9 +22,14 @@ public class CarteiraController {
         return ResponseEntity.ok(carteiraService.criarCarteira(usuarioId, carteiraDTO));
     }
 
-    @GetMapping("/{idUsuario}")
+    @GetMapping("/usuario/{idUsuario}")
     public ResponseEntity<List<CarteiraDTO>> buscaCarteirasPorIDUsuario(@PathVariable Long idUsuario) {
         return ResponseEntity.ok(carteiraService.buscaCarteiraPorIDUsuario(idUsuario));
+    }
+
+    @GetMapping("/{idCarteira}")
+    public ResponseEntity<CarteiraDTO> getCarteiraPorId(@PathVariable Long idCarteira) throws Exception {
+        return ResponseEntity.ok(carteiraService.buscaCarteira(idCarteira));
     }
 
     @DeleteMapping("/{id}")

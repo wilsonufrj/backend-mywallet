@@ -8,6 +8,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/api/usuario")
@@ -22,8 +23,14 @@ public class UsuarioController {
     }
     
     @PostMapping("/login")
-    public ResponseEntity<UsuarioDTO> loginUsuario(@RequestBody LoginDTO usuario) throws Exception{
-        return ResponseEntity.ok(usuarioService.login(usuario));
+    public ResponseEntity loginUsuario(@RequestBody LoginDTO usuario) throws Exception{
+        try{
+            return ResponseEntity.ok(usuarioService.login(usuario));
+        //Fazer com que a mensagem chegue ao usuario final
+        }catch (Exception ex){
+            ex.getMessage();
+            return ResponseEntity.badRequest().body(ex.getMessage());
+        }
     }
 
     @GetMapping("/{id}")

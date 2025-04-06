@@ -66,7 +66,6 @@ public class CarteiraService implements ICarteiraService {
         return carteiraMapper.toDTO(carteiraRepository.save(carteira));
     }
 
-
     @Override
     public void deletarCarteira(Long id) throws Exception {
         Carteira carteira = carteiraRepository.findById(id)
@@ -89,5 +88,13 @@ public class CarteiraService implements ICarteiraService {
                 .filter(carteira -> carteira.getUsuarios().stream().anyMatch((Usuario usuario) -> usuario.getId().equals(idUsuario)))
                 .map(carteiraMapper::toDTO)
                 .toList();
+    }
+
+    @Override
+    public CarteiraDTO buscaCarteira(Long id) throws Exception{
+        return carteiraRepository.findById(id)
+                .map(carteiraMapper::toDTO)
+                .orElseThrow(()-> new Exception("Carteira não existe"));
+
     }
 }

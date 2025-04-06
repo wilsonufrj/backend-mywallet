@@ -34,10 +34,7 @@ public class UsuarioService implements IUsuarioService {
 
     @Override
     public void deletarUsuario(Long id) {
-
-        UsuarioDTO usuarioDTO = buscarPorId(id);
-
-        usuarioRepository.delete(usuarioMapper.toEntity(usuarioDTO));
+        usuarioRepository.deleteById(id);
     }
 
     @Override
