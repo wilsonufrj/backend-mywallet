@@ -5,7 +5,6 @@ import br.projeto.mywallet.Mappers.TransacaoMapper;
 import br.projeto.mywallet.Model.*;
 import br.projeto.mywallet.Service.ITransacaoService;
 import br.projeto.mywallet.repository.*;
-import org.mapstruct.factory.Mappers;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -40,7 +39,7 @@ public class TransacaoService implements ITransacaoService {
     private TransacaoMapper transacaoMapper = TransacaoMapper.INSTANCE;
     
     @Override
-    public TransacaoDTO criarTransacao(TransacaoDTO transacaoDTO) throws Exception{
+    public TransacaoDTO criarTransacao(TransacaoDTO transacaoDTO, Long idMes) throws Exception{
         
         Transacao transacao = transacaoMapper.toEntity(transacaoDTO);
 
@@ -56,10 +55,14 @@ public class TransacaoService implements ITransacaoService {
         Responsavel responsavel = responsavelRepository.findById(transacao.getResponsavel().getId())
                 .orElseThrow(()-> new Exception("Responsavel nao encontrado"));
 
+        Mes mes = mesRepository.findById(idMes)
+                        .orElseThrow(()-> new Exception("Mes nao encontrado"));
+
         transacao.setBanco(banco);
         transacao.setFormaPagamento(formaPagamento);
         transacao.setStatus(status);
         transacao.setResponsavel(responsavel);
+        transacao.setMes(mes);
         transacao.setReceita(true);
 
         return transacaoMapper
@@ -79,7 +82,6 @@ public class TransacaoService implements ITransacaoService {
         transacaoDTO.setFormaPagamento(transacaoAtualizada.getFormaPagamento());
         transacaoDTO.setStatus(transacaoAtualizada.getStatus());
         transacaoDTO.setResponsavel(transacaoAtualizada.getResponsavel());
-        transacaoDTO.setMes(transacaoAtualizada.getMes());
         transacaoDTO.setTipoTransacao(transacaoAtualizada.getTipoTransacao());
 
         return transacaoMapper

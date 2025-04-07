@@ -1,5 +1,6 @@
 package br.projeto.mywallet.Service;
 
+import br.projeto.mywallet.DTO.BalancoDTO;
 import br.projeto.mywallet.DTO.MesDTO;
 import java.util.List;
 
@@ -9,4 +10,6 @@ public interface IMesService {
     void deletarMes(Long id);
     MesDTO buscarPorId(Long id);
     List<MesDTO> listarTodos();
+
+    BalancoDTO balancoMes(Long id) throws Exception;
 }

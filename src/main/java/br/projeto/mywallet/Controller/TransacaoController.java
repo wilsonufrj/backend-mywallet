@@ -16,10 +16,10 @@ public class TransacaoController {
     @Autowired
     private ITransacaoService transacaoService;
 
-    @PostMapping
-    public ResponseEntity<TransacaoDTO> criarTransacao(@RequestBody TransacaoDTO transacao) {
+    @PostMapping("/{idMes}")
+    public ResponseEntity<TransacaoDTO> criarTransacao(@RequestBody TransacaoDTO transacao, @PathVariable Long idMes) {
         try{
-            return ResponseEntity.ok(transacaoService.criarTransacao(transacao));
+            return ResponseEntity.ok(transacaoService.criarTransacao(transacao,idMes));
         }catch (Exception ex){
             return ResponseEntity.badRequest().build();
         }

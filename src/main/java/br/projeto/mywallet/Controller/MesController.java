@@ -1,5 +1,6 @@
 package br.projeto.mywallet.Controller;
 
+import br.projeto.mywallet.DTO.BalancoDTO;
 import br.projeto.mywallet.DTO.MesDTO;
 import br.projeto.mywallet.Model.Mes;
 import br.projeto.mywallet.Service.IMesService;
@@ -26,8 +27,14 @@ public class MesController {
         return ResponseEntity.ok(mesService.atualizarMes(id, mesDTO));
     }
 
+    @GetMapping("/{id}")
     public ResponseEntity<MesDTO> selecionaMes(@PathVariable Long id){
         return ResponseEntity.ok(mesService.buscarPorId(id));
+    }
+
+    @GetMapping("balanco/{id}")
+    public ResponseEntity<BalancoDTO> getBalancoMes(@PathVariable Long id) throws Exception {
+        return ResponseEntity.ok(mesService.balancoMes(id));
     }
 
     @DeleteMapping("/{id}")

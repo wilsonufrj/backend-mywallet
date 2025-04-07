@@ -21,10 +21,8 @@ public interface TransacaoMapper {
 
     TransacaoMapper INSTANCE = Mappers.getMapper(TransacaoMapper.class);
 
-    @Mapping(target = "mes", ignore = true)
     TransacaoDTO toDTO(Transacao transacao);
 
-    @Mapping(target = "mes", ignore = true)
     Transacao toEntity(TransacaoDTO transacaoDTO);
 
 }
