@@ -113,10 +113,7 @@ public class TransacaoService implements ITransacaoService {
 
     @Override
     public void deletarTransacao(Long id) {
-
-        TransacaoDTO transacaoDTO = buscarPorId(id);
-
-        transacaoRepository.delete(transacaoMapper.toEntity(transacaoDTO));
+        transacaoRepository.deleteById(id);
     }
 
     @Override
