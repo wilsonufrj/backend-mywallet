@@ -37,26 +37,26 @@ public class TransacaoService implements ITransacaoService {
 
     @Autowired
     private TransacaoMapper transacaoMapper = TransacaoMapper.INSTANCE;
-    
+
     @Override
-    public TransacaoDTO criarTransacao(TransacaoDTO transacaoDTO, Long idMes) throws Exception{
-        
+    public TransacaoDTO criarTransacao(TransacaoDTO transacaoDTO, Long idMes) throws Exception {
+
         Transacao transacao = transacaoMapper.toEntity(transacaoDTO);
 
         Banco banco = bancoRepository.findById(transacao.getBanco().getId())
-                .orElseThrow(()-> new Exception("Banco nao encontrado"));
+                .orElseThrow(() -> new Exception("Banco nao encontrado"));
 
         FormaPagamento formaPagamento = formaPagamentoRepository.findById(transacao.getFormaPagamento().getId())
-                .orElseThrow(()-> new Exception("Forma de pagamento nao encontrada"));
+                .orElseThrow(() -> new Exception("Forma de pagamento nao encontrada"));
 
         Status status = statusRepository.findById(transacao.getStatus().getId())
-                .orElseThrow(()-> new Exception("Status nao encontrado"));
+                .orElseThrow(() -> new Exception("Status nao encontrado"));
 
         Responsavel responsavel = responsavelRepository.findById(transacao.getResponsavel().getId())
-                .orElseThrow(()-> new Exception("Responsavel nao encontrado"));
+                .orElseThrow(() -> new Exception("Responsavel nao encontrado"));
 
         Mes mes = mesRepository.findById(idMes)
-                        .orElseThrow(()-> new Exception("Mes nao encontrado"));
+                .orElseThrow(() -> new Exception("Mes nao encontrado"));
 
         transacao.setBanco(banco);
         transacao.setFormaPagamento(formaPagamento);
@@ -71,43 +71,66 @@ public class TransacaoService implements ITransacaoService {
 
     @Override
     public TransacaoDTO atualizarTransacao(Long id, TransacaoDTO transacaoAtualizada) {
-        
-        TransacaoDTO transacaoDTO = buscarPorId(id);
 
-        transacaoDTO.setData(transacaoAtualizada.getData());
-        transacaoDTO.setDescricao(transacaoAtualizada.getDescricao());
-        transacaoDTO.setValor(transacaoAtualizada.getValor());
-        transacaoDTO.setQuantasVezes(transacaoAtualizada.getQuantasVezes());
-        transacaoDTO.setBanco(transacaoAtualizada.getBanco());
-        transacaoDTO.setFormaPagamento(transacaoAtualizada.getFormaPagamento());
-        transacaoDTO.setStatus(transacaoAtualizada.getStatus());
-        transacaoDTO.setResponsavel(transacaoAtualizada.getResponsavel());
-        transacaoDTO.setTipoTransacao(transacaoAtualizada.getTipoTransacao());
+        try {
+            Transacao transacao = transacaoRepository.findById(transacaoAtualizada.getId())
+                    .orElseThrow(() -> new Exception("Transacao não encontrada"));
 
-        return transacaoMapper
-                .toDTO(transacaoRepository.save(transacaoMapper.toEntity(transacaoDTO)));
+            Banco banco = bancoRepository.findById(transacaoAtualizada.getBanco().getId())
+                    .orElseThrow(() -> new Exception("Banco nao encontrado"));
+
+            FormaPagamento formaPagamento = formaPagamentoRepository.findById(transacaoAtualizada.getFormaPagamento().getId())
+                    .orElseThrow(() -> new Exception("Forma de pagamento nao encontrada"));
+
+            Status status = statusRepository.findById(transacaoAtualizada.getStatus().getId())
+                    .orElseThrow(() -> new Exception("Status nao encontrado"));
+
+            Responsavel responsavel = responsavelRepository.findById(transacaoAtualizada.getResponsavel().getId())
+                    .orElseThrow(() -> new Exception("Responsavel nao encontrado"));
+
+            TipoTransacao tipoTransacao = tipoTransacaoRepository.findById(transacaoAtualizada.getTipoTransacao().getId())
+                            .orElseThrow(()-> new Exception("Tipo de transacao nao encontrado"));
+
+            transacao.setData(transacaoAtualizada.getData());
+            transacao.setDescricao(transacaoAtualizada.getDescricao());
+            transacao.setValor(transacaoAtualizada.getValor());
+            transacao.setQuantasVezes(transacaoAtualizada.getQuantasVezes());
+            transacao.setBanco(banco);
+            transacao.setFormaPagamento(formaPagamento);
+            transacao.setStatus(status);
+            transacao.setResponsavel(responsavel);
+            transacao.setTipoTransacao(tipoTransacao);
+
+            return transacaoMapper
+                    .toDTO(transacaoRepository.save(transacao));
+
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+
+
     }
 
     @Override
     public void deletarTransacao(Long id) {
-        
+
         TransacaoDTO transacaoDTO = buscarPorId(id);
-        
+
         transacaoRepository.delete(transacaoMapper.toEntity(transacaoDTO));
     }
 
     @Override
     public TransacaoDTO buscarPorId(Long id) {
-        
+
         Optional<Transacao> transacao = transacaoRepository.findById(id);
-        
+
         return transacao.map(transacaoMapper::toDTO)
                 .orElseThrow(() -> new RuntimeException("Transação com ID " + id + " não encontrada."));
     }
 
     @Override
     public List<TransacaoDTO> listarTodas() {
-        
+
         return transacaoRepository.findAll().stream()
                 .map(transacaoMapper::toDTO)
                 .toList();

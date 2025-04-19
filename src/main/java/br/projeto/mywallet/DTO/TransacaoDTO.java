@@ -16,14 +16,11 @@ public class TransacaoDTO {
     private Float valor;
     
     private Integer quantasVezes;
-    
-    
+
     private BancoDTO banco;
-    
-    
+
     private FormaPagamentoDTO formaPagamento;
-    
-   
+
     private StatusDTO status;
 
     private ResponsavelDTO responsavel;
