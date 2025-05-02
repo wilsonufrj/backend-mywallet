@@ -10,12 +10,6 @@ CREATE TABLE forma_pagamento (
     nome VARCHAR(50) NOT NULL
 );
 
--- Tabela Status
-CREATE TABLE status (
-    id SERIAL PRIMARY KEY,
-    nome VARCHAR(50) NOT NULL
-);
-
 -- Tabela Responsavel
 CREATE TABLE responsavel (
     id SERIAL PRIMARY KEY,
@@ -71,13 +65,12 @@ CREATE TABLE transacao (
     receita BOOLEAN NOT NULL,
     banco_id INT NOT NULL,
     forma_pagamento_id INT NOT NULL,
-    status_id INT NOT NULL,
+    status VARCHAR(100) NOT NULL,
     responsavel_id INT NOT NULL,
     mes_id INT NOT NULL,
     tipo_transacao_id INT NOT NULL,
     FOREIGN KEY (banco_id) REFERENCES banco(id),
     FOREIGN KEY (forma_pagamento_id) REFERENCES forma_pagamento(id),
-    FOREIGN KEY (status_id) REFERENCES status(id),
     FOREIGN KEY (responsavel_id) REFERENCES responsavel(id),
     FOREIGN KEY (mes_id) REFERENCES mes(id),
     FOREIGN KEY (tipo_transacao_id) REFERENCES tipo_transacao(id)

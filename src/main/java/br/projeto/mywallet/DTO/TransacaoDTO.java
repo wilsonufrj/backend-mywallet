@@ -1,5 +1,7 @@
 package br.projeto.mywallet.DTO;
 
+import br.projeto.mywallet.enums.TipoStatus;
+
 import java.time.LocalDate;
 
 /**
@@ -21,7 +23,7 @@ public class TransacaoDTO {
 
     private FormaPagamentoDTO formaPagamento;
 
-    private StatusDTO status;
+    private TipoStatus status;
 
     private ResponsavelDTO responsavel;
 
@@ -31,7 +33,7 @@ public class TransacaoDTO {
 
     public TransacaoDTO(){}
 
-    public TransacaoDTO(Long id, LocalDate data, String descricao, Float valor, Integer quantasVezes, BancoDTO banco, FormaPagamentoDTO formaPagamento, StatusDTO status, ResponsavelDTO responsavel, TipoTransacaoDTO tipoTransacao, Boolean isReceita) {
+    public TransacaoDTO(Long id, LocalDate data, String descricao, Float valor, Integer quantasVezes, BancoDTO banco, FormaPagamentoDTO formaPagamento, TipoStatus status, ResponsavelDTO responsavel, TipoTransacaoDTO tipoTransacao, Boolean isReceita) {
         this.id = id;
         this.data = data;
         this.descricao = descricao;
@@ -101,11 +103,11 @@ public class TransacaoDTO {
         this.formaPagamento = formaPagamento;
     }
 
-    public StatusDTO getStatus() {
+    public TipoStatus getStatus() {
         return status;
     }
 
-    public void setStatus(StatusDTO status) {
+    public void setStatus(TipoStatus status) {
         this.status = status;
     }
 

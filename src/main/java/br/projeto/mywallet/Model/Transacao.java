@@ -1,13 +1,7 @@
 package br.projeto.mywallet.Model;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
-import jakarta.persistence.Table;
+import br.projeto.mywallet.enums.TipoStatus;
+import jakarta.persistence.*;
 
 import java.time.LocalDate;
 
@@ -45,9 +39,9 @@ public class Transacao {
     @JoinColumn(name = "forma_pagamento_id", nullable = false)
     private FormaPagamento formaPagamento;
 
-    @ManyToOne
-    @JoinColumn(name = "status_id", nullable = false)
-    private Status status;
+    @Enumerated(EnumType.STRING)
+    @JoinColumn(name = "status", nullable = false)
+    private TipoStatus status;
 
     @ManyToOne
     @JoinColumn(name = "responsavel_id", nullable = false)
@@ -64,7 +58,7 @@ public class Transacao {
     public Transacao() {
     }
 
-    public Transacao(Long id, LocalDate data, String descricao, Float valor, Integer quantasVezes, Boolean isReceita, Banco banco, FormaPagamento formaPagamento, Status status, Responsavel responsavel, Mes mes, TipoTransacao tipoTransacao) {
+    public Transacao(Long id, LocalDate data, String descricao, Float valor, Integer quantasVezes, Boolean isReceita, Banco banco, FormaPagamento formaPagamento, TipoStatus status, Responsavel responsavel, Mes mes, TipoTransacao tipoTransacao) {
         this.id = id;
         this.data = data;
         this.descricao = descricao;
@@ -135,11 +129,11 @@ public class Transacao {
         this.formaPagamento = formaPagamento;
     }
 
-    public Status getStatus() {
+    public TipoStatus getStatus() {
         return status;
     }
 
-    public void setStatus(Status status) {
+    public void setStatus(TipoStatus status) {
         this.status = status;
     }
 

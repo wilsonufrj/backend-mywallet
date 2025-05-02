@@ -13,7 +13,6 @@ import org.mapstruct.factory.Mappers;
 @Mapper(componentModel = "spring", uses = {
     BancoMapper.class,
     FormaPagamentoMapper.class,
-    StatusMapper.class,
     ResponsavelMapper.class,
     MesMapper.class,
     TipoTransacaoMapper.class})

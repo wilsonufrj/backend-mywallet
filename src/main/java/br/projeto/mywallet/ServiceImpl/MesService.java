@@ -7,6 +7,7 @@ import br.projeto.mywallet.Model.Carteira;
 import br.projeto.mywallet.Model.Mes;
 import br.projeto.mywallet.Model.Transacao;
 import br.projeto.mywallet.Service.IMesService;
+import br.projeto.mywallet.enums.TipoStatus;
 import br.projeto.mywallet.repository.ICarteiraRepository;
 import br.projeto.mywallet.repository.IMesRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -79,7 +80,7 @@ public class MesService implements IMesService {
 
         balanco.setTotalGanhoMes(getGanhosMensais(transacoes));
         balanco.setTotalGastosMes(getGastosMensais(transacoes));
-        balanco.setSaldoAtual(balanco.getTotalGanhoMes() - balanco.getTotalGastosMes());
+        balanco.setSaldoAtual(getSaldoAtual(balanco,transacoes));
         balanco.setInvestimentoMes(getInvestimentos(transacoes));
         balanco.setGastosNaoPagosCredito(getGastosNaoPagosCredito(transacoes));
         balanco.setSaldoMesSeguinte(balanco.getTotalGanhoMes() - balanco.getGastosNaoPagosCredito());
@@ -87,10 +88,22 @@ public class MesService implements IMesService {
         return balanco;
     }
 
+    private Double getSaldoAtual(BalancoDTO balancoDTO,List<Transacao> transacoes){
+        return balancoDTO.getTotalGanhoMes() -getGastosPagos(transacoes);
+    }
+
+    private Double getGastosPagos(List<Transacao> transacoes){
+        return transacoes.stream()
+                .filter(transacao -> transacao.getTipoTransacao().getNome().equals("Crédito")
+                        && transacao.getStatus().equals(TipoStatus.PAGO))
+                .mapToDouble(Transacao::getValor)
+                .sum();
+    }
+
     private Double getGastosNaoPagosCredito(List<Transacao> transacoes) {
         return transacoes.stream()
                 .filter(transacao -> transacao.getTipoTransacao().getNome().equals("Crédito")
-                        && transacao.getStatus().getNome().equals("Não Pago"))
+                        && transacao.getStatus().equals(TipoStatus.NAO_PAGO))
                 .mapToDouble(Transacao::getValor)
                 .sum();
     }
