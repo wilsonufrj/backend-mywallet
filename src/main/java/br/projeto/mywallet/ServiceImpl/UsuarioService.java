@@ -1,12 +1,16 @@
 package br.projeto.mywallet.ServiceImpl;
 
+import br.projeto.mywallet.DTO.AuthenticateDTO;
 import br.projeto.mywallet.DTO.LoginDTO;
 import br.projeto.mywallet.DTO.UsuarioDTO;
 import br.projeto.mywallet.Mappers.UsuarioMapper;
 import br.projeto.mywallet.Model.Usuario;
 import br.projeto.mywallet.Service.IUsuarioService;
+import br.projeto.mywallet.Utils.JwtUtil;
 import br.projeto.mywallet.repository.IUsuarioRepository;
+
 import java.util.HashSet;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -48,23 +52,25 @@ public class UsuarioService implements IUsuarioService {
 
     @Override
     public List<UsuarioDTO> listarTodos() {
-
         return usuarioRepository.findAll().stream()
                 .map(usuarioMapper::toDTO)
                 .toList();
     }
 
     @Override
-    public UsuarioDTO login(LoginDTO loginDTO) throws Exception {
-        
+    public AuthenticateDTO login(LoginDTO loginDTO) throws Exception {
+
         return usuarioRepository.findAll()
                 .stream()
                 .filter(usuario -> usuario.getNome().equals(loginDTO.getNome())
                         && usuario.getSenha().equals(loginDTO.getSenha()))
                 .findFirst()
-                .map(usuarioMapper::toDTO)
-                .orElseThrow(()-> new Exception("Usuario não encontrado"));
-                
+                .map((usuario -> new AuthenticateDTO(
+                        JwtUtil.generateToken(usuario.getNome()),
+                        usuario.getNome(),
+                        usuario.getId()
+                )))
+                .orElseThrow(() -> new Exception("Credenciais Inválidas"));
 
     }
 }

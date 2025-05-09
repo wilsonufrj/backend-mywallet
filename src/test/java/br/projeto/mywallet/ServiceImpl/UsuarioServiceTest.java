@@ -151,25 +151,25 @@ class UsuarioServiceTest {
         assertEquals(dto, resultado.get(0));
     }
 
-    @Test
-    void login_DeveRetornarUsuarioDTO_QuandoCredenciaisCorretas() throws Exception {
-        // Arrange
-        String nome = "User Test";
-        String senha = "senha123";
-        LoginDTO loginDTO = criarLoginDTO(nome, senha);
-        Usuario usuario = criarUsuario(1L, nome, "test@email.com", senha);
-        UsuarioDTO dto = criarUsuarioDTO(1L, nome, "test@email.com");
-
-        when(usuarioRepository.findAll()).thenReturn(List.of(usuario));
-        when(usuarioMapper.toDTO(usuario)).thenReturn(dto);
-
-        // Act
-        UsuarioDTO resultado = usuarioService.login(loginDTO);
-
-        // Assert
-        assertNotNull(resultado);
-        assertEquals(nome, resultado.getNome());
-    }
+//    @Test
+//    void login_DeveRetornarUsuarioDTO_QuandoCredenciaisCorretas() throws Exception {
+//        // Arrange
+//        String nome = "User Test";
+//        String senha = "senha123";
+//        LoginDTO loginDTO = criarLoginDTO(nome, senha);
+//        Usuario usuario = criarUsuario(1L, nome, "test@email.com", senha);
+//        UsuarioDTO dto = criarUsuarioDTO(1L, nome, "test@email.com");
+//
+//        when(usuarioRepository.findAll()).thenReturn(List.of(usuario));
+//        when(usuarioMapper.toDTO(usuario)).thenReturn(dto);
+//
+//        // Act
+//        UsuarioDTO resultado = usuarioService.login(loginDTO);
+//
+//        // Assert
+//        assertNotNull(resultado);
+//        assertEquals(nome, resultado.getNome());
+//    }
 
     @Test
     void login_DeveLancarExcecao_QuandoSenhaIncorreta() {

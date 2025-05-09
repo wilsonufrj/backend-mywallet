@@ -80,6 +80,7 @@ public class MesService implements IMesService {
 
         balanco.setTotalGanhoMes(getGanhosMensais(transacoes));
         balanco.setTotalGastosMes(getGastosMensais(transacoes));
+        //O saldo atual eh a soma dos ganhos do usuario logado menos as transacoes pagas por ele no débito, gastos no credito pago
         balanco.setSaldoAtual(getSaldoAtual(balanco,transacoes));
         balanco.setInvestimentoMes(getInvestimentos(transacoes));
         balanco.setGastosNaoPagosCredito(getGastosNaoPagosCredito(transacoes));
