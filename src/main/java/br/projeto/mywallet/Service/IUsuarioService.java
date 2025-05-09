@@ -12,7 +12,7 @@ public interface IUsuarioService {
 
     UsuarioDTO buscarPorId(Long id);
 
-    UsuarioDTO login(LoginDTO usuarioDTO) throws Exception;
+    String login(LoginDTO usuarioDTO) throws Exception;
 
     List<UsuarioDTO> listarTodos();
 }
