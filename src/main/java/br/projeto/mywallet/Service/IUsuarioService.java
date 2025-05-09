@@ -1,5 +1,6 @@
 package br.projeto.mywallet.Service;
 
+import br.projeto.mywallet.DTO.AuthenticateDTO;
 import br.projeto.mywallet.DTO.LoginDTO;
 import br.projeto.mywallet.DTO.UsuarioDTO;
 
@@ -12,7 +13,7 @@ public interface IUsuarioService {
 
     UsuarioDTO buscarPorId(Long id);
 
-    String login(LoginDTO usuarioDTO) throws Exception;
+    AuthenticateDTO login(LoginDTO usuarioDTO) throws Exception;
 
     List<UsuarioDTO> listarTodos();
 }

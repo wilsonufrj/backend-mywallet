@@ -1,5 +1,6 @@
 package br.projeto.mywallet.ServiceImpl;
 
+import br.projeto.mywallet.DTO.AuthenticateDTO;
 import br.projeto.mywallet.DTO.LoginDTO;
 import br.projeto.mywallet.DTO.UsuarioDTO;
 import br.projeto.mywallet.Mappers.UsuarioMapper;
@@ -57,14 +58,18 @@ public class UsuarioService implements IUsuarioService {
     }
 
     @Override
-    public String login(LoginDTO loginDTO) throws Exception {
+    public AuthenticateDTO login(LoginDTO loginDTO) throws Exception {
 
         return usuarioRepository.findAll()
                 .stream()
                 .filter(usuario -> usuario.getNome().equals(loginDTO.getNome())
                         && usuario.getSenha().equals(loginDTO.getSenha()))
                 .findFirst()
-                .map((usuario -> JwtUtil.generateToken(usuario.getNome())))
+                .map((usuario -> new AuthenticateDTO(
+                        JwtUtil.generateToken(usuario.getNome()),
+                        usuario.getNome(),
+                        usuario.getId()
+                )))
                 .orElseThrow(() -> new Exception("Credenciais Inválidas"));
 
     }
