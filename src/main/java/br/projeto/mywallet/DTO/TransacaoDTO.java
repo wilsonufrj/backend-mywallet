@@ -1,6 +1,8 @@
 package br.projeto.mywallet.DTO;
 
+import br.projeto.mywallet.enums.TipoFormaPagamento;
 import br.projeto.mywallet.enums.TipoStatus;
+import br.projeto.mywallet.enums.TipoTransacao;
 
 import java.time.LocalDate;
 
@@ -21,19 +23,19 @@ public class TransacaoDTO {
 
     private BancoDTO banco;
 
-    private FormaPagamentoDTO formaPagamento;
+    private TipoFormaPagamento formaPagamento;
 
     private TipoStatus status;
 
     private ResponsavelDTO responsavel;
 
-    private TipoTransacaoDTO tipoTransacao;
+    private TipoTransacao tipoTransacao;
 
     private Boolean isReceita;
 
     public TransacaoDTO(){}
 
-    public TransacaoDTO(Long id, LocalDate data, String descricao, Float valor, Integer quantasVezes, BancoDTO banco, FormaPagamentoDTO formaPagamento, TipoStatus status, ResponsavelDTO responsavel, TipoTransacaoDTO tipoTransacao, Boolean isReceita) {
+    public TransacaoDTO(Long id, LocalDate data, String descricao, Float valor, Integer quantasVezes, BancoDTO banco, TipoFormaPagamento formaPagamento, TipoStatus status, ResponsavelDTO responsavel, TipoTransacao tipoTransacao, Boolean isReceita) {
         this.id = id;
         this.data = data;
         this.descricao = descricao;
@@ -95,11 +97,11 @@ public class TransacaoDTO {
         this.banco = banco;
     }
 
-    public FormaPagamentoDTO getFormaPagamento() {
+    public TipoFormaPagamento getFormaPagamento() {
         return formaPagamento;
     }
 
-    public void setFormaPagamento(FormaPagamentoDTO formaPagamento) {
+    public void setFormaPagamento(TipoFormaPagamento formaPagamento) {
         this.formaPagamento = formaPagamento;
     }
 
@@ -119,11 +121,11 @@ public class TransacaoDTO {
         this.responsavel = responsavel;
     }
 
-    public TipoTransacaoDTO getTipoTransacao() {
+    public TipoTransacao getTipoTransacao() {
         return tipoTransacao;
     }
 
-    public void setTipoTransacao(TipoTransacaoDTO tipoTransacao) {
+    public void setTipoTransacao(TipoTransacao tipoTransacao) {
         this.tipoTransacao = tipoTransacao;
     }
 

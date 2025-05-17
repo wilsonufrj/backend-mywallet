@@ -1,6 +1,8 @@
 package br.projeto.mywallet.Model;
 
+import br.projeto.mywallet.enums.TipoFormaPagamento;
 import br.projeto.mywallet.enums.TipoStatus;
+import br.projeto.mywallet.enums.TipoTransacao;
 import jakarta.persistence.*;
 
 import java.time.LocalDate;
@@ -35,9 +37,9 @@ public class Transacao {
     @JoinColumn(name = "banco_id", nullable = false)
     private Banco banco;
 
-    @ManyToOne
-    @JoinColumn(name = "forma_pagamento_id", nullable = false)
-    private FormaPagamento formaPagamento;
+    @Enumerated(EnumType.STRING)
+    @JoinColumn(name = "forma_pagamento", nullable = false)
+    private TipoFormaPagamento formaPagamento;
 
     @Enumerated(EnumType.STRING)
     @JoinColumn(name = "status", nullable = false)
@@ -51,14 +53,14 @@ public class Transacao {
     @JoinColumn(name = "mes_id", nullable = false)
     private Mes mes;
 
-    @ManyToOne
-    @JoinColumn(name = "tipo_transacao_id", nullable = false)
+    @Enumerated(EnumType.STRING)
+    @JoinColumn(name = "tipo_transacao", nullable = false)
     private TipoTransacao tipoTransacao;
 
     public Transacao() {
     }
 
-    public Transacao(Long id, LocalDate data, String descricao, Float valor, Integer quantasVezes, Boolean isReceita, Banco banco, FormaPagamento formaPagamento, TipoStatus status, Responsavel responsavel, Mes mes, TipoTransacao tipoTransacao) {
+    public Transacao(Long id, LocalDate data, String descricao, Float valor, Integer quantasVezes, Boolean isReceita, Banco banco, TipoFormaPagamento formaPagamento, TipoStatus status, Responsavel responsavel, Mes mes, TipoTransacao tipoTransacao) {
         this.id = id;
         this.data = data;
         this.descricao = descricao;
@@ -121,11 +123,11 @@ public class Transacao {
         this.banco = banco;
     }
 
-    public FormaPagamento getFormaPagamento() {
+    public TipoFormaPagamento getFormaPagamento() {
         return formaPagamento;
     }
 
-    public void setFormaPagamento(FormaPagamento formaPagamento) {
+    public void setFormaPagamento(TipoFormaPagamento formaPagamento) {
         this.formaPagamento = formaPagamento;
     }
 

@@ -1,7 +1,8 @@
-package br.projeto.mywallet.ServiceImpl;
+package br.projeto.mywallet.Service.impl;
 
 import br.projeto.mywallet.DTO.CarteiraDTO;
-import br.projeto.mywallet.Mappers.CarteiraMapper;
+import br.projeto.mywallet.DTO.MesDTO;
+import br.projeto.mywallet.DTO.UsuarioInfo;
 import br.projeto.mywallet.Model.Carteira;
 import br.projeto.mywallet.Model.Mes;
 import br.projeto.mywallet.Model.Usuario;
@@ -28,16 +29,13 @@ public class CarteiraService implements ICarteiraService {
     @Autowired
     private IUsuarioRepository usuarioRepository;
 
-    @Autowired
-    private CarteiraMapper carteiraMapper = CarteiraMapper.INSTANCE;
-
     @Override
     public CarteiraDTO criarCarteira(Long usuarioId, CarteiraDTO carteiraDTO) throws Exception {
 
         Usuario usuarioLogged = usuarioRepository.findById(usuarioId)
                 .orElseThrow(() -> new Exception("Usuario não encontrado"));
 
-        Carteira carteira = carteiraMapper.toEntity(carteiraDTO);
+        Carteira carteira = new Carteira();
 
         Set<Usuario> usuarios = new HashSet<>();
         usuarios.add(usuarioLogged);
@@ -63,7 +61,7 @@ public class CarteiraService implements ICarteiraService {
         carteira.setMeses(List.of(new Mes(dataAtual.getMonth().name(), dataAtual.getYear(), carteira, new ArrayList<>())));
 
 
-        return carteiraMapper.toDTO(carteiraRepository.save(carteira));
+        return toDto(carteiraRepository.save(carteira));
     }
 
     @Override
@@ -86,15 +84,34 @@ public class CarteiraService implements ICarteiraService {
 
         return carteiras.stream()
                 .filter(carteira -> carteira.getUsuarios().stream().anyMatch((Usuario usuario) -> usuario.getId().equals(idUsuario)))
-                .map(carteiraMapper::toDTO)
+                .map(CarteiraService::toDto)
                 .toList();
     }
 
     @Override
     public CarteiraDTO buscaCarteira(Long id) throws Exception{
         return carteiraRepository.findById(id)
-                .map(carteiraMapper::toDTO)
+                .map(CarteiraService::toDto)
                 .orElseThrow(()-> new Exception("Carteira não existe"));
 
+    }
+
+    public static CarteiraDTO toDto(Carteira carteira){
+
+        Set<UsuarioInfo> usuariosInfo = carteira.getUsuarios()
+                .stream()
+                .map(UsuarioService::toInfo)
+                .collect(Collectors.toSet());
+
+        List<MesDTO> meses = carteira.getMeses().stream()
+                .map(MesService::toDto)
+                .toList();
+
+        return new CarteiraDTO(
+                carteira.getId(),
+                carteira.getNome(),
+                usuariosInfo,
+                meses
+        );
     }
 }

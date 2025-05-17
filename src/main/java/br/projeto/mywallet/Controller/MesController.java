@@ -22,11 +22,6 @@ public class MesController {
         return ResponseEntity.ok(mesService.criarMes(mesDTO));
     }
 
-    @PutMapping("/{id}")
-    public ResponseEntity<MesDTO> atualizarMes(@PathVariable Long id, @RequestBody MesDTO mesDTO) {
-        return ResponseEntity.ok(mesService.atualizarMes(id, mesDTO));
-    }
-
     @GetMapping("/{id}")
     public ResponseEntity<MesDTO> selecionaMes(@PathVariable Long id){
         return ResponseEntity.ok(mesService.buscarPorId(id));

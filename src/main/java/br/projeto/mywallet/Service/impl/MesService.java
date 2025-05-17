@@ -1,18 +1,21 @@
-package br.projeto.mywallet.ServiceImpl;
+package br.projeto.mywallet.Service.impl;
 
 import br.projeto.mywallet.DTO.BalancoDTO;
+import br.projeto.mywallet.DTO.CarteiraDTO;
 import br.projeto.mywallet.DTO.MesDTO;
-import br.projeto.mywallet.Mappers.MesMapper;
+import br.projeto.mywallet.DTO.TransacaoDTO;
 import br.projeto.mywallet.Model.Carteira;
 import br.projeto.mywallet.Model.Mes;
 import br.projeto.mywallet.Model.Transacao;
 import br.projeto.mywallet.Service.IMesService;
 import br.projeto.mywallet.enums.TipoStatus;
+import br.projeto.mywallet.enums.TipoTransacao;
 import br.projeto.mywallet.repository.ICarteiraRepository;
 import br.projeto.mywallet.repository.IMesRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -25,30 +28,20 @@ public class MesService implements IMesService {
     @Autowired
     private ICarteiraRepository carteiraRepository;
 
-    @Autowired
-    private final MesMapper mesMapper = MesMapper.INSTANCE;
-
     @Override
     public MesDTO criarMes(MesDTO mesDTO) throws Exception {
+
+        Mes mes= new Mes();
 
         Carteira carteira = carteiraRepository.findById(mesDTO.getCarteira().getId())
                 .orElseThrow(() -> new Exception("Carteira não encontrada"));
 
-        Mes mes = mesMapper.toEntity(mesDTO);
+        mes.setNome(mesDTO.getNome());
+        mes.setAno(mesDTO.getAno());
         mes.setCarteira(carteira);
+        mes.setTransacoes(new ArrayList<>());
 
-        return mesMapper.toDTO(mesRepository.save(mes));
-    }
-
-    @Override
-    public MesDTO atualizarMes(Long id, MesDTO mesAtualizado) {
-        MesDTO mesDTO = buscarPorId(id);
-
-        mesDTO.setNome(mesAtualizado.getNome());
-        mesDTO.setAno(mesAtualizado.getAno());
-        mesDTO.setTransacoes(mesAtualizado.getTransacoes());
-
-        return mesMapper.toDTO(mesRepository.save(mesMapper.toEntity(mesDTO)));
+        return toDto(mesRepository.save(mes));
     }
 
     @Override
@@ -59,14 +52,14 @@ public class MesService implements IMesService {
     @Override
     public MesDTO buscarPorId(Long id) {
         Optional<Mes> mes = mesRepository.findById(id);
-        return mes.map(mesMapper::toDTO)
+        return mes.map(MesService::toDto)
                 .orElseThrow(() -> new RuntimeException("Mês com o ID " + id + " não encontrado."));
     }
 
     @Override
     public List<MesDTO> listarTodos() {
         return mesRepository.findAll().stream()
-                .map(mesMapper::toDTO)
+                .map(MesService::toDto)
                 .toList();
     }
 
@@ -95,7 +88,7 @@ public class MesService implements IMesService {
 
     private Double getGastosPagos(List<Transacao> transacoes){
         return transacoes.stream()
-                .filter(transacao -> transacao.getTipoTransacao().getNome().equals("Crédito")
+                .filter(transacao -> transacao.getTipoTransacao().equals(TipoTransacao.CREDITO)
                         && transacao.getStatus().equals(TipoStatus.PAGO))
                 .mapToDouble(Transacao::getValor)
                 .sum();
@@ -103,7 +96,7 @@ public class MesService implements IMesService {
 
     private Double getGastosNaoPagosCredito(List<Transacao> transacoes) {
         return transacoes.stream()
-                .filter(transacao -> transacao.getTipoTransacao().getNome().equals("Crédito")
+                .filter(transacao -> transacao.getTipoTransacao().equals(TipoTransacao.CREDITO)
                         && transacao.getStatus().equals(TipoStatus.NAO_PAGO))
                 .mapToDouble(Transacao::getValor)
                 .sum();
@@ -111,7 +104,7 @@ public class MesService implements IMesService {
 
     private Double getInvestimentos(List<Transacao> transacoes) {
         return transacoes.stream()
-                .filter(transacao -> transacao.getTipoTransacao().getNome().equals("Investimento"))
+                .filter(transacao -> transacao.getTipoTransacao().equals(TipoTransacao.INVESTIMENTO))
                 .mapToDouble(Transacao::getValor)
                 .sum();
     }
@@ -130,4 +123,21 @@ public class MesService implements IMesService {
                 .sum();
     }
 
+    public static MesDTO toDto(Mes mes){
+
+        List<TransacaoDTO> transacoes = mes.getTransacoes()
+                .stream()
+                .map(TransacaoService::toDto)
+                .toList();
+
+        CarteiraDTO carteiraDTO = CarteiraService.toDto(mes.getCarteira());
+
+        return new MesDTO(
+                mes.getId(),
+                mes.getNome(),
+                mes.getAno(),
+                carteiraDTO,
+                transacoes
+        );
+    }
 }

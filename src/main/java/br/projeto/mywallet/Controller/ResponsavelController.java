@@ -21,11 +21,6 @@ public class ResponsavelController {
         return ResponseEntity.ok(responsavelService.criarResponsavel(responsavelDTO));
     }
 
-    @PutMapping("/{id}")
-    public ResponseEntity<ResponsavelDTO> atualizarResponsavel(@PathVariable Long id, @RequestBody ResponsavelDTO responsavelDTO) {
-        return ResponseEntity.ok(responsavelService.atualizarResponsavel(id, responsavelDTO));
-    }
-
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deletarResponsavel(@PathVariable Long id) {
         responsavelService.deletarResponsavel(id);

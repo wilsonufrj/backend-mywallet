@@ -1,7 +1,8 @@
-package br.projeto.mywallet.ServiceImpl;
+package br.projeto.mywallet.Service.impl;
 
+import br.projeto.mywallet.DTO.BancoDTO;
+import br.projeto.mywallet.DTO.ResponsavelDTO;
 import br.projeto.mywallet.DTO.TransacaoDTO;
-import br.projeto.mywallet.Mappers.TransacaoMapper;
 import br.projeto.mywallet.Model.*;
 import br.projeto.mywallet.Service.ITransacaoService;
 import br.projeto.mywallet.repository.*;
@@ -9,7 +10,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class TransacaoService implements ITransacaoService {
@@ -20,8 +20,6 @@ public class TransacaoService implements ITransacaoService {
     @Autowired
     private IBancoRepository bancoRepository;
 
-    @Autowired
-    private IFormaPagamentoRepository formaPagamentoRepository;
 
     @Autowired
     private IResponsavelRepository responsavelRepository;
@@ -29,22 +27,14 @@ public class TransacaoService implements ITransacaoService {
     @Autowired
     private IMesRepository mesRepository;
 
-    @Autowired
-    private ITipoTransacaoRepository tipoTransacaoRepository;
-
-    @Autowired
-    private TransacaoMapper transacaoMapper = TransacaoMapper.INSTANCE;
 
     @Override
     public TransacaoDTO criarTransacao(TransacaoDTO transacaoDTO, Long idMes) throws Exception {
 
-        Transacao transacao = transacaoMapper.toEntity(transacaoDTO);
+        Transacao transacao = new Transacao();
 
         Banco banco = bancoRepository.findById(transacao.getBanco().getId())
                 .orElseThrow(() -> new Exception("Banco nao encontrado"));
-
-        FormaPagamento formaPagamento = formaPagamentoRepository.findById(transacao.getFormaPagamento().getId())
-                .orElseThrow(() -> new Exception("Forma de pagamento nao encontrada"));
 
         Responsavel responsavel = responsavelRepository.findById(transacao.getResponsavel().getId())
                 .orElseThrow(() -> new Exception("Responsavel nao encontrado"));
@@ -52,18 +42,19 @@ public class TransacaoService implements ITransacaoService {
         Mes mes = mesRepository.findById(idMes)
                 .orElseThrow(() -> new Exception("Mes nao encontrado"));
 
-        TipoTransacao tipoTransacao = tipoTransacaoRepository.findById(transacao.getTipoTransacao().getId())
-                .orElseThrow(() -> new Exception("Tipo Transacao não encontrado"));
-
+        transacao.setData(transacaoDTO.getData());
+        transacao.setDescricao(transacaoDTO.getDescricao());
+        transacao.setValor(transacaoDTO.getValor());
+        transacao.setQuantasVezes(transacaoDTO.getQuantasVezes());
+        transacao.setReceita(transacaoDTO.getReceita());
         transacao.setBanco(banco);
-        transacao.setFormaPagamento(formaPagamento);
+        transacao.setFormaPagamento(transacaoDTO.getFormaPagamento());
+        transacao.setStatus(transacaoDTO.getStatus());
         transacao.setResponsavel(responsavel);
         transacao.setMes(mes);
-        transacao.setTipoTransacao(tipoTransacao);
-        transacao.setReceita(transacaoDTO.getReceita());
+        transacao.setTipoTransacao(transacaoDTO.getTipoTransacao());
 
-        return transacaoMapper
-                .toDTO(transacaoRepository.save(transacao));
+        return toDto(transacaoRepository.save(transacao));
     }
 
     @Override
@@ -76,14 +67,8 @@ public class TransacaoService implements ITransacaoService {
             Banco banco = bancoRepository.findById(transacaoAtualizada.getBanco().getId())
                     .orElseThrow(() -> new Exception("Banco nao encontrado"));
 
-            FormaPagamento formaPagamento = formaPagamentoRepository.findById(transacaoAtualizada.getFormaPagamento().getId())
-                    .orElseThrow(() -> new Exception("Forma de pagamento nao encontrada"));
-
             Responsavel responsavel = responsavelRepository.findById(transacaoAtualizada.getResponsavel().getId())
                     .orElseThrow(() -> new Exception("Responsavel nao encontrado"));
-
-            TipoTransacao tipoTransacao = tipoTransacaoRepository.findById(transacaoAtualizada.getTipoTransacao().getId())
-                            .orElseThrow(()-> new Exception("Tipo de transacao nao encontrado"));
 
             transacao.setData(transacaoAtualizada.getData());
             transacao.setDescricao(transacaoAtualizada.getDescricao());
@@ -91,12 +76,11 @@ public class TransacaoService implements ITransacaoService {
             transacao.setQuantasVezes(transacaoAtualizada.getQuantasVezes());
             transacao.setStatus(transacaoAtualizada.getStatus());
             transacao.setBanco(banco);
-            transacao.setFormaPagamento(formaPagamento);
+            transacao.setFormaPagamento(transacaoAtualizada.getFormaPagamento());
             transacao.setResponsavel(responsavel);
-            transacao.setTipoTransacao(tipoTransacao);
+            transacao.setTipoTransacao(transacaoAtualizada.getTipoTransacao());
 
-            return transacaoMapper
-                    .toDTO(transacaoRepository.save(transacao));
+            return toDto(transacaoRepository.save(transacao));
 
         } catch (Exception e) {
             throw new RuntimeException(e);
@@ -113,14 +97,32 @@ public class TransacaoService implements ITransacaoService {
     @Override
     public TransacaoDTO buscarPorId(Long id) {
         return transacaoRepository.findById(id)
-                .map(transacaoMapper::toDTO)
+                .map(TransacaoService::toDto)
                 .orElseThrow(() -> new RuntimeException("Transação com ID " + id + " não encontrada."));
     }
 
     @Override
     public List<TransacaoDTO> listarTodas() {
         return transacaoRepository.findAll().stream()
-                .map(transacaoMapper::toDTO)
+                .map(TransacaoService::toDto)
                 .toList();
+    }
+
+    public static TransacaoDTO toDto(Transacao transacao){
+        BancoDTO bancoDTO = BancoService.toDto(transacao.getBanco());
+        ResponsavelDTO responsavelDTO = ResponsavelService.toDto(transacao.getResponsavel());
+        return new TransacaoDTO(
+                transacao.getId(),
+                transacao.getData(),
+                transacao.getDescricao(),
+                transacao.getValor(),
+                transacao.getQuantasVezes(),
+                bancoDTO,
+                transacao.getFormaPagamento(),
+                transacao.getStatus(),
+                responsavelDTO,
+                transacao.getTipoTransacao(),
+                transacao.getReceita()
+        );
     }
 }

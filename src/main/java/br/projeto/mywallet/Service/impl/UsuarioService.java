@@ -1,9 +1,6 @@
-package br.projeto.mywallet.ServiceImpl;
+package br.projeto.mywallet.Service.impl;
 
-import br.projeto.mywallet.DTO.AuthenticateDTO;
-import br.projeto.mywallet.DTO.LoginDTO;
-import br.projeto.mywallet.DTO.UsuarioDTO;
-import br.projeto.mywallet.Mappers.UsuarioMapper;
+import br.projeto.mywallet.DTO.*;
 import br.projeto.mywallet.Model.Usuario;
 import br.projeto.mywallet.Service.IUsuarioService;
 import br.projeto.mywallet.Utils.JwtUtil;
@@ -16,6 +13,8 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 @Service
 public class UsuarioService implements IUsuarioService {
@@ -23,17 +22,16 @@ public class UsuarioService implements IUsuarioService {
     @Autowired
     private IUsuarioRepository usuarioRepository;
 
-    @Autowired
-    private UsuarioMapper usuarioMapper = UsuarioMapper.INSTANCE;
-
     @Override
     public UsuarioDTO criarUsuario(UsuarioDTO usuarioDTO) {
 
-        Usuario usuario = usuarioMapper.toEntity(usuarioDTO);
+        Usuario usuario = new Usuario();
+        usuario.setNome(usuarioDTO.getNome());
+        usuario.setDataNascimento(usuarioDTO.getDataNascimento());
+        usuario.setEmail(usuarioDTO.getEmail());
         usuario.setCarteiras(new HashSet<>());
 
-        return usuarioMapper
-                .toDTO(usuarioRepository.save(usuario));
+        return toDto(usuarioRepository.save(usuario));
     }
 
     @Override
@@ -46,14 +44,14 @@ public class UsuarioService implements IUsuarioService {
 
         Optional<Usuario> usuario = usuarioRepository.findById(id);
 
-        return usuario.map(usuarioMapper::toDTO)
+        return usuario.map(UsuarioService::toDto)
                 .orElseThrow(() -> new RuntimeException("Usuário com ID " + id + " não encontrado."));
     }
 
     @Override
     public List<UsuarioDTO> listarTodos() {
         return usuarioRepository.findAll().stream()
-                .map(usuarioMapper::toDTO)
+                .map(UsuarioService::toDto)
                 .toList();
     }
 
@@ -72,5 +70,30 @@ public class UsuarioService implements IUsuarioService {
                 )))
                 .orElseThrow(() -> new Exception("Credenciais Inválidas"));
 
+    }
+
+    public static UsuarioInfo toInfo(Usuario usuario){
+        return new UsuarioInfo(
+                usuario.getId(),
+                usuario.getNome(),
+                usuario.getDataNascimento(),
+                usuario.getEmail()
+        );
+    }
+
+    public static UsuarioDTO toDto(Usuario usuario){
+
+        Set<CarteiraDTO> carteiras = usuario.getCarteiras()
+                .stream()
+                .map(CarteiraService::toDto)
+                .collect(Collectors.toSet());
+
+        return new UsuarioDTO(
+                usuario.getId(),
+                usuario.getNome(),
+                usuario.getDataNascimento(),
+                usuario.getEmail(),
+                carteiras
+        );
     }
 }

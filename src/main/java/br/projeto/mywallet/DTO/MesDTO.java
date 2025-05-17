@@ -23,7 +23,6 @@ public class MesDTO {
         this.id = id;
         this.nome = nome;
         this.ano = ano;
-        this.carteira = carteira;
         this.transacoes = transacoes;
     }
 
@@ -54,7 +53,6 @@ public class MesDTO {
     public CarteiraDTO getCarteira() {
         return carteira;
     }
-
     public void setCarteira(CarteiraDTO carteira) {
         this.carteira = carteira;
     }

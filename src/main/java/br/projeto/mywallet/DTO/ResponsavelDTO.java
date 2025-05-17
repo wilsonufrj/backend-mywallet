@@ -13,13 +13,16 @@ public class ResponsavelDTO {
     private String nome;
    
     private List<TransacaoDTO> transacoes;
-    
+
+    private UsuarioInfo usuarioInfo;
+
     public ResponsavelDTO(){}
 
-    public ResponsavelDTO(Long id, String nome, List<TransacaoDTO> transacoes) {
+    public ResponsavelDTO(Long id, String nome, List<TransacaoDTO> transacoes,UsuarioInfo usuarioInfo) {
         this.id = id;
         this.nome = nome;
         this.transacoes = transacoes;
+        this.usuarioInfo = usuarioInfo;
     }
 
     public Long getId() {

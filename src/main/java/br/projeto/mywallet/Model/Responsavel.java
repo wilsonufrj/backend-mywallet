@@ -1,13 +1,7 @@
 package br.projeto.mywallet.Model;
 
-import jakarta.persistence.CascadeType;
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.OneToMany;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
+
 import java.util.List;
 
 /**
@@ -30,15 +24,20 @@ public class Responsavel {
             orphanRemoval = true
     )
     private List<Transacao> transacoes;
-    
+
+    @ManyToOne
+    @JoinColumn(name = "usuario_id")
+    private Usuario usuario;
+
     public Responsavel(){
         
     }
 
-    public Responsavel(Long id, String nome, List<Transacao> transacoes) {
+    public Responsavel(Long id, String nome, List<Transacao> transacoes,Usuario usuario) {
         this.id = id;
         this.nome = nome;
         this.transacoes = transacoes;
+        this.usuario = usuario;
     }
     
     
@@ -65,6 +64,12 @@ public class Responsavel {
     public void setTransacoes(List<Transacao> transacoes) {
         this.transacoes = transacoes;
     }
-    
-    
+
+    public Usuario getUsuario() {
+        return usuario;
+    }
+
+    public void setUsuario(Usuario usuario) {
+        this.usuario = usuario;
+    }
 }

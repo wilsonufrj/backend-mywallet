@@ -13,14 +13,14 @@ public class CarteiraDTO {
    
     private String nome;
     
-    private Set<UsuarioDTO> usuarios;
+    private Set<UsuarioInfo> usuarios;
    
     private List<MesDTO> meses;
 
     public CarteiraDTO() {
     }
 
-    public CarteiraDTO(Long id, String nome, Set<UsuarioDTO> usuarios, List<MesDTO> meses) {
+    public CarteiraDTO(Long id, String nome, Set<UsuarioInfo> usuarios, List<MesDTO> meses) {
         this.id = id;
         this.nome = nome;
         this.usuarios = usuarios;
@@ -43,11 +43,11 @@ public class CarteiraDTO {
         this.nome = nome;
     }
 
-    public Set<UsuarioDTO> getUsuarios() {
+    public Set<UsuarioInfo> getUsuarios() {
         return usuarios;
     }
 
-    public void setUsuarios(Set<UsuarioDTO> usuarios) {
+    public void setUsuarios(Set<UsuarioInfo> usuarios) {
         this.usuarios = usuarios;
     }
 
