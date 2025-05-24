@@ -33,10 +33,10 @@ public class TransacaoService implements ITransacaoService {
 
         Transacao transacao = new Transacao();
 
-        Banco banco = bancoRepository.findById(transacao.getBanco().getId())
+        Banco banco = bancoRepository.findById(transacaoDTO.getBanco().getId())
                 .orElseThrow(() -> new Exception("Banco nao encontrado"));
 
-        Responsavel responsavel = responsavelRepository.findById(transacao.getResponsavel().getId())
+        Responsavel responsavel = responsavelRepository.findById(transacaoDTO.getResponsavel().getId())
                 .orElseThrow(() -> new Exception("Responsavel nao encontrado"));
 
         Mes mes = mesRepository.findById(idMes)
@@ -109,8 +109,10 @@ public class TransacaoService implements ITransacaoService {
     }
 
     public static TransacaoDTO toDto(Transacao transacao){
+
         BancoDTO bancoDTO = BancoService.toDto(transacao.getBanco());
         ResponsavelDTO responsavelDTO = ResponsavelService.toDto(transacao.getResponsavel());
+
         return new TransacaoDTO(
                 transacao.getId(),
                 transacao.getData(),

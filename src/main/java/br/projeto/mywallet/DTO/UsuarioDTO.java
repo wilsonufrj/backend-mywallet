@@ -17,15 +17,18 @@ public class UsuarioDTO {
 
     private String email;
 
+    private String senha;
+
     private Set<CarteiraDTO> carteiras;
     
     public UsuarioDTO(){}
 
-    public UsuarioDTO(Long id, String nome, LocalDate dataNascimento, String email, Set<CarteiraDTO> carteiras) {
+    public UsuarioDTO(Long id, String nome, LocalDate dataNascimento, String senha,String email, Set<CarteiraDTO> carteiras) {
         this.id = id;
         this.nome = nome;
         this.dataNascimento = dataNascimento;
         this.email = email;
+        this.senha = senha;
         this.carteiras = carteiras;
     }
 
@@ -55,6 +58,14 @@ public class UsuarioDTO {
 
     public String getEmail() {
         return email;
+    }
+
+    public String getSenha() {
+        return senha;
+    }
+
+    public void setSenha(String senha) {
+        this.senha = senha;
     }
 
     public void setEmail(String email) {

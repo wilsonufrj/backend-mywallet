@@ -11,6 +11,8 @@ public interface IUsuarioService {
 
     void deletarUsuario(Long id) ;
 
+    AuthenticateDTO criarUsuarioELogar(UsuarioDTO usuarioDTO);
+
     UsuarioDTO buscarPorId(Long id);
 
     AuthenticateDTO login(LoginDTO usuarioDTO) throws Exception;

@@ -59,7 +59,7 @@ public class CarteiraService implements ICarteiraService {
 
         LocalDate dataAtual = LocalDate.now();
         carteira.setMeses(List.of(new Mes(dataAtual.getMonth().name(), dataAtual.getYear(), carteira, new ArrayList<>())));
-
+        carteira.setNome(carteiraDTO.getNome());
 
         return toDto(carteiraRepository.save(carteira));
     }

@@ -38,7 +38,7 @@ public class ResponsavelService implements IResponsavelService {
             responsavel.setTransacoes(new ArrayList<>());
             responsavel.setUsuario(usuario);
             return toDto(responsavelRepository.save(responsavel));
-            
+
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
@@ -58,25 +58,29 @@ public class ResponsavelService implements IResponsavelService {
     }
 
     @Override
-    public List<ResponsavelDTO> listarTodos() {
-        return responsavelRepository.findAll().stream()
-                .map(ResponsavelService::toDto)
-                .toList();
+    public List<ResponsavelDTO> listarTodos(Long id) {
+
+        try{
+            Usuario usuario = usuarioRepository.findById(id)
+                    .orElseThrow(() -> new Exception("Usuario nao encontrado"));
+
+            return responsavelRepository.findAll().stream()
+                    .filter(responsavel -> responsavel.getUsuario().getId().equals(id))
+                    .map(ResponsavelService::toDto)
+                    .toList();
+
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
     }
 
     public static ResponsavelDTO toDto(Responsavel responsavel) {
 
         UsuarioInfo usuarioInfo = UsuarioService.toInfo(responsavel.getUsuario());
 
-        List<TransacaoDTO> transacoes = responsavel.getTransacoes()
-                .stream()
-                .map(TransacaoService::toDto)
-                .toList();
-
         return new ResponsavelDTO(
                 responsavel.getId(),
                 responsavel.getNome(),
-                transacoes,
                 usuarioInfo
         );
     }

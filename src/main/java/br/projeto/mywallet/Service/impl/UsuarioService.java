@@ -1,19 +1,17 @@
 package br.projeto.mywallet.Service.impl;
 
 import br.projeto.mywallet.DTO.*;
+import br.projeto.mywallet.Model.Responsavel;
 import br.projeto.mywallet.Model.Usuario;
 import br.projeto.mywallet.Service.IUsuarioService;
 import br.projeto.mywallet.Utils.JwtUtil;
 import br.projeto.mywallet.repository.IUsuarioRepository;
 
-import java.util.HashSet;
+import java.util.*;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
-import java.util.Optional;
-import java.util.Set;
 import java.util.stream.Collectors;
 
 @Service
@@ -30,6 +28,14 @@ public class UsuarioService implements IUsuarioService {
         usuario.setDataNascimento(usuarioDTO.getDataNascimento());
         usuario.setEmail(usuarioDTO.getEmail());
         usuario.setCarteiras(new HashSet<>());
+        usuario.setSenha(usuarioDTO.getSenha());
+
+        //Isso aqui da ruim quando mais pessoas começarem a usar
+        //Um usuário não vai ter necessariamente o mesmo id dele como responsável
+        usuario.setResponsaveis(
+                List.of(
+                    new Responsavel(usuario.getNome(),new ArrayList<>(),usuario)
+        ));
 
         return toDto(usuarioRepository.save(usuario));
     }
@@ -55,6 +61,21 @@ public class UsuarioService implements IUsuarioService {
                 .toList();
     }
 
+    public AuthenticateDTO criarUsuarioELogar(UsuarioDTO usuarioDTO){
+        try {
+
+            UsuarioDTO auxUsuario = criarUsuario(usuarioDTO);
+
+            Usuario usuario= usuarioRepository.findById(auxUsuario.getId())
+                    .orElseThrow(()-> new Exception("O Usuario nao foi cadastrado"));
+
+            return login(new LoginDTO(usuario.getNome(),usuario.getSenha()));
+
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+
+    }
     @Override
     public AuthenticateDTO login(LoginDTO loginDTO) throws Exception {
 
@@ -92,6 +113,7 @@ public class UsuarioService implements IUsuarioService {
                 usuario.getId(),
                 usuario.getNome(),
                 usuario.getDataNascimento(),
+                usuario.getSenha(),
                 usuario.getEmail(),
                 carteiras
         );

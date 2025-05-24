@@ -35,6 +35,19 @@ public class TransacaoDTO {
 
     public TransacaoDTO(){}
 
+    public TransacaoDTO(Long id, LocalDate data, String descricao, Float valor, Integer quantasVezes, BancoDTO banco, TipoFormaPagamento formaPagamento, TipoStatus status, TipoTransacao tipoTransacao, Boolean isReceita) {
+        this.id = id;
+        this.data = data;
+        this.descricao = descricao;
+        this.valor = valor;
+        this.quantasVezes = quantasVezes;
+        this.banco = banco;
+        this.formaPagamento = formaPagamento;
+        this.status = status;
+        this.tipoTransacao = tipoTransacao;
+        this.isReceita = isReceita;
+    }
+
     public TransacaoDTO(Long id, LocalDate data, String descricao, Float valor, Integer quantasVezes, BancoDTO banco, TipoFormaPagamento formaPagamento, TipoStatus status, ResponsavelDTO responsavel, TipoTransacao tipoTransacao, Boolean isReceita) {
         this.id = id;
         this.data = data;

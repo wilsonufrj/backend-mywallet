@@ -1,5 +1,6 @@
 package br.projeto.mywallet.Model;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 
 import java.util.List;
@@ -27,13 +28,20 @@ public class Responsavel {
 
     @ManyToOne
     @JoinColumn(name = "usuario_id")
+    @JsonIgnoreProperties
     private Usuario usuario;
 
     public Responsavel(){
         
     }
 
-    public Responsavel(Long id, String nome, List<Transacao> transacoes,Usuario usuario) {
+    public Responsavel(String nome, List<Transacao> transacoes, Usuario usuario) {
+        this.nome = nome;
+        this.transacoes = transacoes;
+        this.usuario = usuario;
+    }
+
+    public Responsavel(Long id, String nome, List<Transacao> transacoes, Usuario usuario) {
         this.id = id;
         this.nome = nome;
         this.transacoes = transacoes;

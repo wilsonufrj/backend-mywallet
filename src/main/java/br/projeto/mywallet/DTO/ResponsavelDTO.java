@@ -11,17 +11,14 @@ public class ResponsavelDTO {
     private Long id;
     
     private String nome;
-   
-    private List<TransacaoDTO> transacoes;
 
     private UsuarioInfo usuarioInfo;
 
     public ResponsavelDTO(){}
 
-    public ResponsavelDTO(Long id, String nome, List<TransacaoDTO> transacoes,UsuarioInfo usuarioInfo) {
+    public ResponsavelDTO(Long id, String nome, UsuarioInfo usuarioInfo) {
         this.id = id;
         this.nome = nome;
-        this.transacoes = transacoes;
         this.usuarioInfo = usuarioInfo;
     }
 
@@ -40,14 +37,5 @@ public class ResponsavelDTO {
     public void setNome(String nome) {
         this.nome = nome;
     }
-
-    public List<TransacaoDTO> getTransacoes() {
-        return transacoes;
-    }
-
-    public void setTransacoes(List<TransacaoDTO> transacoes) {
-        this.transacoes = transacoes;
-    }
-    
     
 }

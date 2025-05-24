@@ -5,7 +5,6 @@ public class BalancoDTO {
     private Double totalGastosMes;
     private Double saldoAtual;
     private Double investimentoMes;
-    private Double gastosNaoPagosCredito;
     private Double saldoMesSeguinte;
 
     public Double getTotalGanhoMes() {
@@ -38,14 +37,6 @@ public class BalancoDTO {
 
     public void setInvestimentoMes(Double investimentoMes) {
         this.investimentoMes = investimentoMes;
-    }
-
-    public Double getGastosNaoPagosCredito() {
-        return gastosNaoPagosCredito;
-    }
-
-    public void setGastosNaoPagosCredito(Double gastosNaoPagosCredito) {
-        this.gastosNaoPagosCredito = gastosNaoPagosCredito;
     }
 
     public Double getSaldoMesSeguinte() {

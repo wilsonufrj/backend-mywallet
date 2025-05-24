@@ -8,6 +8,7 @@ import br.projeto.mywallet.Model.Carteira;
 import br.projeto.mywallet.Model.Mes;
 import br.projeto.mywallet.Model.Transacao;
 import br.projeto.mywallet.Service.IMesService;
+import br.projeto.mywallet.enums.TipoFormaPagamento;
 import br.projeto.mywallet.enums.TipoStatus;
 import br.projeto.mywallet.enums.TipoTransacao;
 import br.projeto.mywallet.repository.ICarteiraRepository;
@@ -18,6 +19,7 @@ import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Stream;
 
 @Service
 public class MesService implements IMesService {
@@ -73,28 +75,28 @@ public class MesService implements IMesService {
 
         balanco.setTotalGanhoMes(getGanhosMensais(transacoes));
         balanco.setTotalGastosMes(getGastosMensais(transacoes));
-        //O saldo atual eh a soma dos ganhos do usuario logado menos as transacoes pagas por ele no débito, gastos no credito pago
-        balanco.setSaldoAtual(getSaldoAtual(balanco,transacoes));
         balanco.setInvestimentoMes(getInvestimentos(transacoes));
-        balanco.setGastosNaoPagosCredito(getGastosNaoPagosCredito(transacoes));
-        balanco.setSaldoMesSeguinte(balanco.getTotalGanhoMes() - balanco.getGastosNaoPagosCredito());
+        balanco.setSaldoAtual(getSaldoAtual(transacoes));
+        balanco.setSaldoMesSeguinte(getGanhosMensais(transacoes) - getGastosCredito(transacoes));
 
         return balanco;
     }
 
-    private Double getSaldoAtual(BalancoDTO balancoDTO,List<Transacao> transacoes){
-        return balancoDTO.getTotalGanhoMes() -getGastosPagos(transacoes);
+    private Double getSaldoAtual(List<Transacao> transacoes){
+
+        return getGanhosMensais(transacoes)
+                -getInvestimentos(transacoes)
+                -getGastosPagosDebito(transacoes);
     }
 
-    private Double getGastosPagos(List<Transacao> transacoes){
-        return transacoes.stream()
-                .filter(transacao -> transacao.getTipoTransacao().equals(TipoTransacao.CREDITO)
-                        && transacao.getStatus().equals(TipoStatus.PAGO))
+    private Double getGastosPagosDebito(List<Transacao> transacoes){
+        return getGastos(transacoes)
+                .filter(transacao ->transacao.getTipoTransacao().equals(TipoTransacao.DEBITO))
                 .mapToDouble(Transacao::getValor)
                 .sum();
     }
 
-    private Double getGastosNaoPagosCredito(List<Transacao> transacoes) {
+    private Double getGastosCredito(List<Transacao> transacoes) {
         return transacoes.stream()
                 .filter(transacao -> transacao.getTipoTransacao().equals(TipoTransacao.CREDITO)
                         && transacao.getStatus().equals(TipoStatus.NAO_PAGO))
@@ -103,26 +105,33 @@ public class MesService implements IMesService {
     }
 
     private Double getInvestimentos(List<Transacao> transacoes) {
-        return transacoes.stream()
+        return  getGastos(transacoes)
                 .filter(transacao -> transacao.getTipoTransacao().equals(TipoTransacao.INVESTIMENTO))
                 .mapToDouble(Transacao::getValor)
                 .sum();
     }
 
     private Double getGastosMensais(List<Transacao> transacoes) {
-        return transacoes.stream()
-                .filter(transacao -> !transacao.getReceita())
+        return getGastos(transacoes)
                 .mapToDouble(Transacao::getValor)
                 .sum();
     }
 
     private Double getGanhosMensais(List<Transacao> transacoes) {
-        return transacoes.stream()
-                .filter(Transacao::getReceita)
+        return getGanhos(transacoes)
                 .mapToDouble(Transacao::getValor)
                 .sum();
     }
 
+    private Stream<Transacao> getGastos(List<Transacao> transacoes){
+        return transacoes.stream()
+                .filter(transacao -> !transacao.getReceita());
+    }
+
+    private Stream<Transacao> getGanhos(List<Transacao> transacoes){
+        return transacoes.stream()
+                .filter(Transacao::getReceita);
+    }
     public static MesDTO toDto(Mes mes){
 
         List<TransacaoDTO> transacoes = mes.getTransacoes()
@@ -130,13 +139,10 @@ public class MesService implements IMesService {
                 .map(TransacaoService::toDto)
                 .toList();
 
-        CarteiraDTO carteiraDTO = CarteiraService.toDto(mes.getCarteira());
-
         return new MesDTO(
                 mes.getId(),
                 mes.getNome(),
                 mes.getAno(),
-                carteiraDTO,
                 transacoes
         );
     }

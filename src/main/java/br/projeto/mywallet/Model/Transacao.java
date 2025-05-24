@@ -3,6 +3,7 @@ package br.projeto.mywallet.Model;
 import br.projeto.mywallet.enums.TipoFormaPagamento;
 import br.projeto.mywallet.enums.TipoStatus;
 import br.projeto.mywallet.enums.TipoTransacao;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 
 import java.time.LocalDate;
@@ -35,6 +36,7 @@ public class Transacao {
 
     @ManyToOne
     @JoinColumn(name = "banco_id", nullable = false)
+    @JsonIgnoreProperties
     private Banco banco;
 
     @Enumerated(EnumType.STRING)
@@ -47,10 +49,12 @@ public class Transacao {
 
     @ManyToOne
     @JoinColumn(name = "responsavel_id", nullable = false)
+    @JsonIgnoreProperties
     private Responsavel responsavel;
 
     @ManyToOne
     @JoinColumn(name = "mes_id", nullable = false)
+    @JsonIgnoreProperties
     private Mes mes;
 
     @Enumerated(EnumType.STRING)

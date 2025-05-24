@@ -1,6 +1,7 @@
 package br.projeto.mywallet.Controller;
 
 import br.projeto.mywallet.DTO.BancoDTO;
+import br.projeto.mywallet.Model.Banco;
 import br.projeto.mywallet.Service.IBancoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -14,6 +15,11 @@ public class BancoController {
 
     @Autowired
     private IBancoService bancoService;
+
+    @PostMapping
+    public ResponseEntity<BancoDTO> criaBanco(@RequestBody BancoDTO bancoDTO){
+        return ResponseEntity.ok(bancoService.criarBanco(bancoDTO));
+    }
 
     @GetMapping("/{id}")
     public ResponseEntity<BancoDTO> buscarBancoPorId(@PathVariable Long id) {

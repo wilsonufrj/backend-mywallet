@@ -108,6 +108,14 @@
             this.carteiras = carteiras;
         }
 
+        public List<Responsavel> getResponsaveis() {
+            return responsaveis;
+        }
+
+        public void setResponsaveis(List<Responsavel> responsaveis) {
+            this.responsaveis = responsaveis;
+        }
+
         public void adicionarCarteira(Carteira carteira) {
             this.carteiras.add(carteira);
             carteira.getUsuarios().add(this);

@@ -1,5 +1,6 @@
 package br.projeto.mywallet.Model;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -32,6 +33,7 @@ public class Mes {
     
     @ManyToOne
     @JoinColumn(name = "carteira_id", nullable = false)
+    @JsonIgnoreProperties
     private Carteira carteira;
     
     @OneToMany(

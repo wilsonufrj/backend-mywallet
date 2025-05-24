@@ -32,8 +32,8 @@ public class ResponsavelController {
         return ResponseEntity.ok(responsavelService.buscarPorId(id));
     }
 
-    @GetMapping
-    public ResponseEntity<List<ResponsavelDTO>> listarTodos() {
-        return ResponseEntity.ok(responsavelService.listarTodos());
+    @GetMapping("/usuario/{id}")
+    public ResponseEntity<List<ResponsavelDTO>> listarTodos(@PathVariable Long id) {
+        return ResponseEntity.ok(responsavelService.listarTodos(id));
     }
 }

@@ -19,6 +19,13 @@ public class MesDTO {
     
     public MesDTO(){}
 
+    public MesDTO(Long id, String nome, Integer ano, List<TransacaoDTO> transacoes) {
+        this.id = id;
+        this.nome = nome;
+        this.ano = ano;
+        this.transacoes = transacoes;
+    }
+
     public MesDTO(Long id, String nome, Integer ano, CarteiraDTO carteira, List<TransacaoDTO> transacoes) {
         this.id = id;
         this.nome = nome;
