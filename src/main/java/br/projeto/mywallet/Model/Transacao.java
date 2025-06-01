@@ -32,7 +32,7 @@ public class Transacao {
     @Column(name = "quantas_vezes")
     private Integer quantasVezes;
 
-    @Column(name = "receita")
+    @Column(name = "is_receita")
     private Boolean isReceita;
 
     @ManyToOne

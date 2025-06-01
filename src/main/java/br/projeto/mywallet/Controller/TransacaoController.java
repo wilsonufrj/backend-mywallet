@@ -25,7 +25,7 @@ public class TransacaoController {
         }
     }
 
-    @PutMapping("/{idMes}")
+    @PutMapping("/{idMes}/batch")
     public ResponseEntity<List<TransacaoDTO>> editaTransacoes(@RequestBody List<TransacaoDTO> transacoes, @PathVariable Long idMes) {
         try{
             return ResponseEntity.ok(transacaoService.editaTransacoes(transacoes,idMes));
@@ -34,10 +34,10 @@ public class TransacaoController {
         }
     }
 
-//    @PutMapping("/{id}")
-//    public ResponseEntity<TransacaoDTO> atualizarTransacao(@PathVariable Long id, @RequestBody TransacaoDTO transacaoAtualizada) {
-//        return ResponseEntity.ok(transacaoService.atualizarTransacao(id, transacaoAtualizada));
-//    }
+    @PutMapping("/{id}")
+    public ResponseEntity<TransacaoDTO> atualizarTransacao(@PathVariable Long id, @RequestBody TransacaoDTO transacaoAtualizada) {
+        return ResponseEntity.ok(transacaoService.atualizarTransacao(id, transacaoAtualizada));
+    }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deletarTransacao(@PathVariable Long id) {

@@ -33,7 +33,7 @@ public class Mes {
     @Column(name = "ano")
     private Integer ano;
 
-    @Column(name="porcentagem-investimento")
+    @Column(name="porcentagem_investimento")
     private Integer porcentagemInvestimento;
 
     @ManyToOne
