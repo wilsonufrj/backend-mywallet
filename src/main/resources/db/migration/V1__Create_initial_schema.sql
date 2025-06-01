@@ -81,51 +81,102 @@ INSERT INTO banco (id, nome) VALUES (2, 'Itaú Unibanco');
 INSERT INTO banco (id, nome) VALUES (3, 'Bradesco');
 INSERT INTO banco (id, nome) VALUES (4, 'Santander');
 INSERT INTO banco (id, nome) VALUES (5, 'Caixa Econômica Federal');
+INSERT INTO banco (id, nome) VALUES (6, 'Nubank');
+
+-- Atualizar as sequências para os IDs que já foram inseridos manualmente
+SELECT setval('banco_id_seq', (SELECT MAX(id) FROM banco));
 
 -- Admin User (ID: 1)
 INSERT INTO usuario (id, nome, data_nascimento, email, senha) VALUES (1, 'Admin User', '1980-01-01', 'admin@example.com', 'admin_password');
+SELECT setval('usuario_id_seq', (SELECT MAX(id) FROM usuario));
+
 INSERT INTO carteira (id, nome) VALUES (1, 'Admin Wallet');
+SELECT setval('carteira_id_seq', (SELECT MAX(id) FROM carteira));
+
 INSERT INTO usuario_carteira (usuario_id, carteira_id) VALUES (1, 1);
+
 INSERT INTO responsavel (id, nome, usuario_id) VALUES (1, 'Admin User', 1);
+SELECT setval('responsavel_id_seq', (SELECT MAX(id) FROM responsavel));
+
 INSERT INTO mes (id, nome, ano, porcentagem_investimento, carteira_id) VALUES (1, 'DEZEMBRO', 2023, 10, 1);
+SELECT setval('mes_id_seq', (SELECT MAX(id) FROM mes));
 
 -- Additional Users
 
 -- User 2 (ID: 2)
 INSERT INTO usuario (id, nome, data_nascimento, email, senha) VALUES (2, 'Alice Wonderland', '1990-05-15', 'alice@example.com', 'alicepass');
+SELECT setval('usuario_id_seq', (SELECT MAX(id) FROM usuario));
+
 INSERT INTO carteira (id, nome) VALUES (2, 'Alice Personal');
+SELECT setval('carteira_id_seq', (SELECT MAX(id) FROM carteira));
+
 INSERT INTO usuario_carteira (usuario_id, carteira_id) VALUES (2, 2);
+
 INSERT INTO responsavel (id, nome, usuario_id) VALUES (2, 'Alice Wonderland', 2);
+SELECT setval('responsavel_id_seq', (SELECT MAX(id) FROM responsavel));
+
 INSERT INTO mes (id, nome, ano, porcentagem_investimento, carteira_id) VALUES (2, 'DEZEMBRO', 2023, 15, 2);
+SELECT setval('mes_id_seq', (SELECT MAX(id) FROM mes));
 
 -- User 3 (ID: 3)
 INSERT INTO usuario (id, nome, data_nascimento, email, senha) VALUES (3, 'Bob The Builder', '1985-08-20', 'bob@example.com', 'bobpass');
+SELECT setval('usuario_id_seq', (SELECT MAX(id) FROM usuario));
+
 INSERT INTO carteira (id, nome) VALUES (3, 'Bob Savings');
+SELECT setval('carteira_id_seq', (SELECT MAX(id) FROM carteira));
+
 INSERT INTO usuario_carteira (usuario_id, carteira_id) VALUES (3, 3);
+
 INSERT INTO responsavel (id, nome, usuario_id) VALUES (3, 'Bob The Builder', 3);
+SELECT setval('responsavel_id_seq', (SELECT MAX(id) FROM responsavel));
+
 INSERT INTO mes (id, nome, ano, porcentagem_investimento, carteira_id) VALUES (3, 'DEZEMBRO', 2023, 20, 3);
+SELECT setval('mes_id_seq', (SELECT MAX(id) FROM mes));
 
 -- User 4 (ID: 4)
 INSERT INTO usuario (id, nome, data_nascimento, email, senha) VALUES (4, 'Charlie Brown', '2000-12-01', 'charlie@example.com', 'charliepass');
+SELECT setval('usuario_id_seq', (SELECT MAX(id) FROM usuario));
+
 INSERT INTO carteira (id, nome) VALUES (4, 'Charlie College Fund');
+SELECT setval('carteira_id_seq', (SELECT MAX(id) FROM carteira));
+
 INSERT INTO usuario_carteira (usuario_id, carteira_id) VALUES (4, 4);
+
 INSERT INTO responsavel (id, nome, usuario_id) VALUES (4, 'Charlie Brown', 4);
+SELECT setval('responsavel_id_seq', (SELECT MAX(id) FROM responsavel));
+
 INSERT INTO mes (id, nome, ano, porcentagem_investimento, carteira_id) VALUES (4, 'DEZEMBRO', 2023, 5, 4);
+SELECT setval('mes_id_seq', (SELECT MAX(id) FROM mes));
 
 -- User 5 (ID: 5)
 INSERT INTO usuario (id, nome, data_nascimento, email, senha) VALUES (5, 'Diana Prince', '1975-03-22', 'diana@example.com', 'dianapass');
+SELECT setval('usuario_id_seq', (SELECT MAX(id) FROM usuario));
+
 INSERT INTO carteira (id, nome) VALUES (5, 'Diana Investments');
+SELECT setval('carteira_id_seq', (SELECT MAX(id) FROM carteira));
+
 INSERT INTO usuario_carteira (usuario_id, carteira_id) VALUES (5, 5);
+
 INSERT INTO responsavel (id, nome, usuario_id) VALUES (5, 'Diana Prince', 5);
+SELECT setval('responsavel_id_seq', (SELECT MAX(id) FROM responsavel));
+
 INSERT INTO mes (id, nome, ano, porcentagem_investimento, carteira_id) VALUES (5, 'DEZEMBRO', 2023, 25, 5);
+SELECT setval('mes_id_seq', (SELECT MAX(id) FROM mes));
 
 -- User 6 (ID: 6)
 INSERT INTO usuario (id, nome, data_nascimento, email, senha) VALUES (6, 'Ethan Hunt', '1988-07-10', 'ethan@example.com', 'ethanpass');
-INSERT INTO carteira (id, nome) VALUES (6, 'Ethan Mission Funds');
-INSERT INTO usuario_carteira (usuario_id, carteira_id) VALUES (6, 6);
-INSERT INTO responsavel (id, nome, usuario_id) VALUES (6, 'Ethan Hunt', 6);
-INSERT INTO mes (id, nome, ano, porcentagem_investimento, carteira_id) VALUES (6, 'DEZEMBRO', 2023, 12, 6);
+SELECT setval('usuario_id_seq', (SELECT MAX(id) FROM usuario));
 
+INSERT INTO carteira (id, nome) VALUES (6, 'Ethan Mission Funds');
+SELECT setval('carteira_id_seq', (SELECT MAX(id) FROM carteira));
+
+INSERT INTO usuario_carteira (usuario_id, carteira_id) VALUES (6, 6);
+
+INSERT INTO responsavel (id, nome, usuario_id) VALUES (6, 'Ethan Hunt', 6);
+SELECT setval('responsavel_id_seq', (SELECT MAX(id) FROM responsavel));
+
+INSERT INTO mes (id, nome, ano, porcentagem_investimento, carteira_id) VALUES (6, 'DEZEMBRO', 2023, 12, 6);
+SELECT setval('mes_id_seq', (SELECT MAX(id) FROM mes));
 -- Transactions for Admin User (User ID: 1, Responsavel ID: 1, Mes ID: 1)
 -- Day 1-30
 INSERT INTO transacao (data, descricao, valor, quantas_vezes, is_receita, banco_id, forma_pagamento, status, responsavel_id, mes_id, tipo_transacao) VALUES
