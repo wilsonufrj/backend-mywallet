@@ -1,14 +1,14 @@
 package br.projeto.mywallet.Service.impl;
 
+import br.projeto.mywallet.DTO.BalancoConjuntoDTO;
 import br.projeto.mywallet.DTO.BalancoDTO;
-import br.projeto.mywallet.DTO.CarteiraDTO;
 import br.projeto.mywallet.DTO.MesDTO;
 import br.projeto.mywallet.DTO.TransacaoDTO;
 import br.projeto.mywallet.Model.Carteira;
 import br.projeto.mywallet.Model.Mes;
+import br.projeto.mywallet.Model.Responsavel;
 import br.projeto.mywallet.Model.Transacao;
 import br.projeto.mywallet.Service.IMesService;
-import br.projeto.mywallet.enums.TipoFormaPagamento;
 import br.projeto.mywallet.enums.TipoStatus;
 import br.projeto.mywallet.enums.TipoTransacao;
 import br.projeto.mywallet.repository.ICarteiraRepository;
@@ -16,9 +16,7 @@ import br.projeto.mywallet.repository.IMesRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 import java.util.stream.Stream;
 
 @Service
@@ -33,7 +31,7 @@ public class MesService implements IMesService {
     @Override
     public MesDTO criarMes(MesDTO mesDTO) throws Exception {
 
-        Mes mes= new Mes();
+        Mes mes = new Mes();
 
         Carteira carteira = carteiraRepository.findById(mesDTO.getCarteira().getId())
                 .orElseThrow(() -> new Exception("Carteira não encontrada"));
@@ -84,7 +82,68 @@ public class MesService implements IMesService {
     }
 
     @Override
-    public MesDTO atualizaPorcentagemMes(Integer porcentagemMes, Long idMes){
+    public List<BalancoConjuntoDTO> balancoConjunto(Long idMes) {
+        try {
+            Mes mes = this.mesRepository.findById(idMes)
+                    .orElseThrow(() -> new Exception("Ero ao encontrar o mês"));
+
+            List<Responsavel> responsaveis = mes.getCarteira().getUsuarios()
+                    .stream()
+                    .map(usuario ->
+                            usuario.getResponsaveis()
+                                    .stream()
+                                    .filter(auxUsuario -> auxUsuario.getNome().equals(usuario.getNome()))
+                                    .findFirst()
+                                    .orElse(null)
+
+                    )
+                    .filter(Objects::nonNull)
+                    .toList();
+
+            Map<Responsavel, List<Transacao>> balancoResponsavel = new HashMap<>();
+
+            responsaveis
+                    .forEach(responsavel -> {
+                        List<Transacao> transacoes = mes.getTransacoes().stream()
+                                .filter(transacao -> transacao.getResponsavel().getId().equals(responsavel.getId()))
+                                .toList();
+                        balancoResponsavel.put(responsavel, transacoes);
+                    });
+
+            Double ganhoTotalMensal = getGanhosMensais(mes.getTransacoes());
+            Double gastosTotalMensal = getGastosMensais(mes.getTransacoes());
+
+            return balancoResponsavel.entrySet()
+                    .stream()
+                    .map(entry -> {
+                        Double somaGanho = getGanhosMensais(entry.getValue());
+
+                        Double porcentagemDosCustos = ganhoTotalMensal.equals(0.00)
+                        ?0
+                        :somaGanho / ganhoTotalMensal;
+                        Double gastoConjunto = gastosTotalMensal * porcentagemDosCustos;
+                        Double investimentoConjunto = somaGanho * ((double) mes.getPorcentagemInvestimento() /100);
+                        Double totalGasto = gastoConjunto + investimentoConjunto;
+                        Double saldoFinal = somaGanho - totalGasto;
+
+                        return new BalancoConjuntoDTO(
+                                ResponsavelService.toDto(entry.getKey()),
+                                porcentagemDosCustos,
+                                gastoConjunto,
+                                investimentoConjunto,
+                                totalGasto,
+                                saldoFinal);
+                    })
+                    .toList();
+
+
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    @Override
+    public MesDTO atualizaPorcentagemMes(Integer porcentagemMes, Long idMes) {
         try {
             Mes mes = this.mesRepository.findById(idMes)
                     .orElseThrow(() -> new Exception("Ero ao encontrar o mês"));
@@ -98,16 +157,16 @@ public class MesService implements IMesService {
         }
     }
 
-    private Double getSaldoAtual(List<Transacao> transacoes){
+    private Double getSaldoAtual(List<Transacao> transacoes) {
 
         return getGanhosMensais(transacoes)
-                -getInvestimentos(transacoes)
-                -getGastosPagosDebito(transacoes);
+                - getInvestimentos(transacoes)
+                - getGastosPagosDebito(transacoes);
     }
 
-    private Double getGastosPagosDebito(List<Transacao> transacoes){
+    private Double getGastosPagosDebito(List<Transacao> transacoes) {
         return getGastos(transacoes)
-                .filter(transacao ->transacao.getTipoTransacao().equals(TipoTransacao.DEBITO))
+                .filter(transacao -> transacao.getTipoTransacao().equals(TipoTransacao.DEBITO))
                 .mapToDouble(Transacao::getValor)
                 .sum();
     }
@@ -121,7 +180,7 @@ public class MesService implements IMesService {
     }
 
     private Double getInvestimentos(List<Transacao> transacoes) {
-        return  getGastos(transacoes)
+        return getGastos(transacoes)
                 .filter(transacao -> transacao.getTipoTransacao().equals(TipoTransacao.INVESTIMENTO))
                 .mapToDouble(Transacao::getValor)
                 .sum();
@@ -139,16 +198,17 @@ public class MesService implements IMesService {
                 .sum();
     }
 
-    private Stream<Transacao> getGastos(List<Transacao> transacoes){
+    private Stream<Transacao> getGastos(List<Transacao> transacoes) {
         return transacoes.stream()
                 .filter(transacao -> !transacao.getReceita());
     }
 
-    private Stream<Transacao> getGanhos(List<Transacao> transacoes){
+    private Stream<Transacao> getGanhos(List<Transacao> transacoes) {
         return transacoes.stream()
                 .filter(Transacao::getReceita);
     }
-    public static MesDTO toDto(Mes mes){
+
+    public static MesDTO toDto(Mes mes) {
 
         List<TransacaoDTO> transacoes = mes.getTransacoes()
                 .stream()

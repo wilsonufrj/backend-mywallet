@@ -1,5 +1,6 @@
 package br.projeto.mywallet.Controller;
 
+import br.projeto.mywallet.DTO.BalancoConjuntoDTO;
 import br.projeto.mywallet.DTO.BalancoDTO;
 import br.projeto.mywallet.DTO.MesDTO;
 import br.projeto.mywallet.Model.Mes;
@@ -30,6 +31,11 @@ public class MesController {
     @GetMapping("balanco/{id}")
     public ResponseEntity<BalancoDTO> getBalancoMes(@PathVariable Long id) throws Exception {
         return ResponseEntity.ok(mesService.balancoMes(id));
+    }
+
+    @GetMapping("balanco-conjunto/{id}")
+    public ResponseEntity<List<BalancoConjuntoDTO>> getBalancoConjuntoMes(@PathVariable Long id) throws Exception {
+        return ResponseEntity.ok(mesService.balancoConjunto(id));
     }
 
     @PutMapping("investimento/{id}")

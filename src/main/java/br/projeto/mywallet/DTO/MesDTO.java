@@ -25,6 +25,7 @@ public class MesDTO {
         this.id = id;
         this.nome = nome;
         this.ano = ano;
+        this.porcentagemInvestimento = porcentagemInvestimento;
         this.transacoes = transacoes;
     }
 
@@ -32,6 +33,7 @@ public class MesDTO {
         this.id = id;
         this.nome = nome;
         this.ano = ano;
+        this.porcentagemInvestimento = porcentagemInvestimento;
         this.transacoes = transacoes;
     }
 
