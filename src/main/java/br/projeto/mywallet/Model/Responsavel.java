@@ -13,7 +13,8 @@ import java.util.List;
 @Table(name = "responsavel")
 public class Responsavel {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY) 
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "responsavel_id_seq_generator")
+    @SequenceGenerator(name = "responsavel_id_seq_generator", sequenceName = "responsavel_id_seq", allocationSize = 1)
     private Long id;
     
     @Column(name = "nome")
