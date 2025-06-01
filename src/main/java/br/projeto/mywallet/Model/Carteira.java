@@ -14,7 +14,8 @@ import java.util.Set;
 public class Carteira {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "carteira_id_seq_generator")
+    @SequenceGenerator(name = "carteira_id_seq_generator", sequenceName = "carteira_id_seq", allocationSize = 1)
     private Long id;
 
     @Column(name = "nome",

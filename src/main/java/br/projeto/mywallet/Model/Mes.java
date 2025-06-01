@@ -8,6 +8,7 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
+import jakarta.persistence.SequenceGenerator;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
@@ -22,7 +23,8 @@ import java.util.List;
 public class Mes {
     
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY) 
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "mes_id_seq_generator")
+    @SequenceGenerator(name = "mes_id_seq_generator", sequenceName = "mes_id_seq", allocationSize = 1)
     private Long id;
     
     @Column(name = "nome")

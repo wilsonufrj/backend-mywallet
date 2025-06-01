@@ -8,6 +8,7 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
+import jakarta.persistence.SequenceGenerator;
 import jakarta.persistence.Table;
 import java.util.ArrayList;
 import java.util.List;
@@ -20,7 +21,8 @@ import java.util.List;
 @Table(name = "banco")
 public class Banco {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY) 
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "banco_id_seq_generator")
+    @SequenceGenerator(name = "banco_id_seq_generator", sequenceName = "banco_id_seq", allocationSize = 1)
     private Long id;
     
     @Column(name = "nome")
