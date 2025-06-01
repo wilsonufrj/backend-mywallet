@@ -1,25 +1,30 @@
--- Create banco table
+-- Create sequences and tables
+
+-- Banco
+CREATE SEQUENCE IF NOT EXISTS banco_id_seq START WITH 1 INCREMENT BY 1;
 CREATE TABLE IF NOT EXISTS banco (
-    id BIGSERIAL PRIMARY KEY,
+    id BIGINT PRIMARY KEY DEFAULT nextval('banco_id_seq'::regclass),
     nome VARCHAR(255)
 );
 
--- Create usuario table
+-- Usuario
+CREATE SEQUENCE IF NOT EXISTS usuario_id_seq START WITH 1 INCREMENT BY 1;
 CREATE TABLE IF NOT EXISTS usuario (
-    id BIGSERIAL PRIMARY KEY,
+    id BIGINT PRIMARY KEY DEFAULT nextval('usuario_id_seq'::regclass),
     nome VARCHAR(255) NOT NULL,
     data_nascimento DATE,
     email VARCHAR(255) NOT NULL UNIQUE,
     senha VARCHAR(255) NOT NULL
 );
 
--- Create carteira table
+-- Carteira
+CREATE SEQUENCE IF NOT EXISTS carteira_id_seq START WITH 1 INCREMENT BY 1;
 CREATE TABLE IF NOT EXISTS carteira (
-    id BIGSERIAL PRIMARY KEY,
+    id BIGINT PRIMARY KEY DEFAULT nextval('carteira_id_seq'::regclass),
     nome VARCHAR(255) NOT NULL
 );
 
--- Create usuario_carteira join table
+-- usuario_carteira join table (no sequence needed as PK is composite)
 CREATE TABLE IF NOT EXISTS usuario_carteira (
     usuario_id BIGINT,
     carteira_id BIGINT,
@@ -28,17 +33,19 @@ CREATE TABLE IF NOT EXISTS usuario_carteira (
     FOREIGN KEY (carteira_id) REFERENCES carteira(id)
 );
 
--- Create responsavel table
+-- Responsavel
+CREATE SEQUENCE IF NOT EXISTS responsavel_id_seq START WITH 1 INCREMENT BY 1;
 CREATE TABLE IF NOT EXISTS responsavel (
-    id BIGSERIAL PRIMARY KEY,
+    id BIGINT PRIMARY KEY DEFAULT nextval('responsavel_id_seq'::regclass),
     nome VARCHAR(255),
     usuario_id BIGINT,
     FOREIGN KEY (usuario_id) REFERENCES usuario(id)
 );
 
--- Create mes table
+-- Mes
+CREATE SEQUENCE IF NOT EXISTS mes_id_seq START WITH 1 INCREMENT BY 1;
 CREATE TABLE IF NOT EXISTS mes (
-    id BIGSERIAL PRIMARY KEY,
+    id BIGINT PRIMARY KEY DEFAULT nextval('mes_id_seq'::regclass),
     nome VARCHAR(255),
     ano INT,
     porcentagem_investimento INT,
@@ -46,9 +53,10 @@ CREATE TABLE IF NOT EXISTS mes (
     FOREIGN KEY (carteira_id) REFERENCES carteira(id)
 );
 
--- Create transacao table
+-- Transacao
+CREATE SEQUENCE IF NOT EXISTS transacao_id_seq START WITH 1 INCREMENT BY 1;
 CREATE TABLE IF NOT EXISTS transacao (
-    id BIGSERIAL PRIMARY KEY,
+    id BIGINT PRIMARY KEY DEFAULT nextval('transacao_id_seq'::regclass),
     data DATE,
     descricao VARCHAR(255),
     valor DECIMAL(19, 2),
