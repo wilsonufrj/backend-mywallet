@@ -29,9 +29,6 @@ public class UsuarioService implements IUsuarioService {
         usuario.setEmail(usuarioDTO.getEmail());
         usuario.setCarteiras(new HashSet<>());
         usuario.setSenha(usuarioDTO.getSenha());
-
-        //Isso aqui da ruim quando mais pessoas começarem a usar
-        //Um usuário não vai ter necessariamente o mesmo id dele como responsável
         usuario.setResponsaveis(
                 List.of(
                     new Responsavel(usuario.getNome(),new ArrayList<>(),usuario)

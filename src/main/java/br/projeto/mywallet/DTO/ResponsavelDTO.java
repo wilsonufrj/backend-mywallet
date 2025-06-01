@@ -9,7 +9,7 @@ import java.util.List;
  */
 public class ResponsavelDTO {
     private Long id;
-    
+
     private String nome;
 
     private UsuarioInfo usuarioInfo;
@@ -37,5 +37,12 @@ public class ResponsavelDTO {
     public void setNome(String nome) {
         this.nome = nome;
     }
-    
+
+    public UsuarioInfo getUsuarioInfo() {
+        return usuarioInfo;
+    }
+
+    public void setUsuarioInfo(UsuarioInfo usuarioInfo) {
+        this.usuarioInfo = usuarioInfo;
+    }
 }

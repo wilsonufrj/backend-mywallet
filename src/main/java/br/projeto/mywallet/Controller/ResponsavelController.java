@@ -21,6 +21,12 @@ public class ResponsavelController {
         return ResponseEntity.ok(responsavelService.criarResponsavel(responsavelDTO));
     }
 
+    @GetMapping
+    public ResponseEntity<List<ResponsavelDTO>> listarTodosResponsaveis() {
+        List<ResponsavelDTO> responsavelDTOListd = responsavelService.listarTodos();
+        return ResponseEntity.ok(responsavelDTOListd);
+    }
+
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deletarResponsavel(@PathVariable Long id) {
         responsavelService.deletarResponsavel(id);
@@ -33,7 +39,7 @@ public class ResponsavelController {
     }
 
     @GetMapping("/usuario/{id}")
-    public ResponseEntity<List<ResponsavelDTO>> listarTodos(@PathVariable Long id) {
+    public ResponseEntity<List<ResponsavelDTO>> listarTodosAssociadosAoUsuario(@PathVariable Long id) {
         return ResponseEntity.ok(responsavelService.listarTodos(id));
     }
 }

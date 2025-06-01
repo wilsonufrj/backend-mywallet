@@ -74,6 +74,14 @@ public class ResponsavelService implements IResponsavelService {
         }
     }
 
+    @Override
+    public List<ResponsavelDTO> listarTodos() {
+        return responsavelRepository.findAll()
+                .stream()
+                .map(ResponsavelService::toDto)
+                .toList();
+    }
+
     public static ResponsavelDTO toDto(Responsavel responsavel) {
 
         UsuarioInfo usuarioInfo = UsuarioService.toInfo(responsavel.getUsuario());

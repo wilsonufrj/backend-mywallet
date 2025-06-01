@@ -12,21 +12,23 @@ public class MesDTO {
     private String nome;
     
     private Integer ano;
-    
+
+    private Integer porcentagemInvestimento;
+
     private CarteiraDTO carteira;
     
     private List<TransacaoDTO> transacoes;
     
     public MesDTO(){}
 
-    public MesDTO(Long id, String nome, Integer ano, List<TransacaoDTO> transacoes) {
+    public MesDTO(Long id, String nome, Integer ano, Integer porcentagemInvestimento,List<TransacaoDTO> transacoes) {
         this.id = id;
         this.nome = nome;
         this.ano = ano;
         this.transacoes = transacoes;
     }
 
-    public MesDTO(Long id, String nome, Integer ano, CarteiraDTO carteira, List<TransacaoDTO> transacoes) {
+    public MesDTO(Long id, String nome, Integer ano, Integer porcentagemInvestimento,CarteiraDTO carteira, List<TransacaoDTO> transacoes) {
         this.id = id;
         this.nome = nome;
         this.ano = ano;
@@ -71,6 +73,12 @@ public class MesDTO {
     public void setTransacoes(List<TransacaoDTO> transacoes) {
         this.transacoes = transacoes;
     }
-    
-    
+
+    public Integer getPorcentagemInvestimento() {
+        return porcentagemInvestimento;
+    }
+
+    public void setPorcentagemInvestimento(Integer porcentagemInvestimento) {
+        this.porcentagemInvestimento = porcentagemInvestimento;
+    }
 }

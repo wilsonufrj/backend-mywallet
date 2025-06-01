@@ -32,6 +32,11 @@ public class MesController {
         return ResponseEntity.ok(mesService.balancoMes(id));
     }
 
+    @PutMapping("investimento/{id}")
+    public ResponseEntity<Integer> atualizaPorcentagemInvestimento(@RequestBody Integer porcentagemInvestimento,@PathVariable Long id){
+        return ResponseEntity.ok(mesService.atualizaPorcentagemMes(porcentagemInvestimento,id).getPorcentagemInvestimento());
+    }
+
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deletarMes(@PathVariable Long id) {
         mesService.deletarMes(id);

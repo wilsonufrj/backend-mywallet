@@ -41,6 +41,7 @@ public class MesService implements IMesService {
         mes.setNome(mesDTO.getNome());
         mes.setAno(mesDTO.getAno());
         mes.setCarteira(carteira);
+        mes.setPorcentagemInvestimento(0);
         mes.setTransacoes(new ArrayList<>());
 
         return toDto(mesRepository.save(mes));
@@ -80,6 +81,21 @@ public class MesService implements IMesService {
         balanco.setSaldoMesSeguinte(getGanhosMensais(transacoes) - getGastosCredito(transacoes));
 
         return balanco;
+    }
+
+    @Override
+    public MesDTO atualizaPorcentagemMes(Integer porcentagemMes, Long idMes){
+        try {
+            Mes mes = this.mesRepository.findById(idMes)
+                    .orElseThrow(() -> new Exception("Ero ao encontrar o mês"));
+
+            mes.setPorcentagemInvestimento(porcentagemMes);
+
+            return toDto(mesRepository.save(mes));
+
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
     }
 
     private Double getSaldoAtual(List<Transacao> transacoes){
@@ -143,6 +159,7 @@ public class MesService implements IMesService {
                 mes.getId(),
                 mes.getNome(),
                 mes.getAno(),
+                mes.getPorcentagemInvestimento(),
                 transacoes
         );
     }

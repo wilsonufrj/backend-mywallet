@@ -9,4 +9,5 @@ public interface IResponsavelService {
     void deletarResponsavel(Long id);
     ResponsavelDTO buscarPorId(Long id);
     List<ResponsavelDTO> listarTodos(Long id);
+    List<ResponsavelDTO> listarTodos();
 }

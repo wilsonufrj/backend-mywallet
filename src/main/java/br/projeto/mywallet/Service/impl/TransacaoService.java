@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Objects;
 
 @Service
 public class TransacaoService implements ITransacaoService {
@@ -29,32 +30,53 @@ public class TransacaoService implements ITransacaoService {
 
 
     @Override
-    public TransacaoDTO criarTransacao(TransacaoDTO transacaoDTO, Long idMes) throws Exception {
+    public TransacaoDTO criarTransacao(TransacaoDTO transacaoDTO, Long idMes) {
 
-        Transacao transacao = new Transacao();
+        try {
 
-        Banco banco = bancoRepository.findById(transacaoDTO.getBanco().getId())
-                .orElseThrow(() -> new Exception("Banco nao encontrado"));
+            Transacao transacao = Objects.isNull(transacaoDTO.getId())
+                    ? new Transacao()
+                    : transacaoRepository.findById(transacaoDTO.getId())
+                        .orElseThrow(() -> new Exception("Usuário não encontrado para o Id fornecido"));
 
-        Responsavel responsavel = responsavelRepository.findById(transacaoDTO.getResponsavel().getId())
-                .orElseThrow(() -> new Exception("Responsavel nao encontrado"));
+            Banco banco = bancoRepository.findById(transacaoDTO.getBanco().getId())
+                    .orElseThrow(() -> new Exception("Banco nao encontrado"));
 
-        Mes mes = mesRepository.findById(idMes)
-                .orElseThrow(() -> new Exception("Mes nao encontrado"));
+            Responsavel responsavel = responsavelRepository.findById(transacaoDTO.getResponsavel().getId())
+                    .orElseThrow(() -> new Exception("Responsável nao encontrado"));
 
-        transacao.setData(transacaoDTO.getData());
-        transacao.setDescricao(transacaoDTO.getDescricao());
-        transacao.setValor(transacaoDTO.getValor());
-        transacao.setQuantasVezes(transacaoDTO.getQuantasVezes());
-        transacao.setReceita(transacaoDTO.getReceita());
-        transacao.setBanco(banco);
-        transacao.setFormaPagamento(transacaoDTO.getFormaPagamento());
-        transacao.setStatus(transacaoDTO.getStatus());
-        transacao.setResponsavel(responsavel);
-        transacao.setMes(mes);
-        transacao.setTipoTransacao(transacaoDTO.getTipoTransacao());
+            Mes mes = mesRepository.findById(idMes)
+                    .orElseThrow(() -> new Exception("Mes nao encontrado"));
 
-        return toDto(transacaoRepository.save(transacao));
+            transacao.setData(transacaoDTO.getData());
+            transacao.setDescricao(transacaoDTO.getDescricao());
+            transacao.setValor(transacaoDTO.getValor());
+            transacao.setQuantasVezes(transacaoDTO.getQuantasVezes());
+            transacao.setReceita(transacaoDTO.getReceita());
+            transacao.setBanco(banco);
+            transacao.setFormaPagamento(transacaoDTO.getFormaPagamento());
+            transacao.setStatus(transacaoDTO.getStatus());
+            transacao.setResponsavel(responsavel);
+            transacao.setMes(mes);
+            transacao.setTipoTransacao(transacaoDTO.getTipoTransacao());
+
+            return toDto(transacaoRepository.save(transacao));
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    @Override
+    public List<TransacaoDTO> editaTransacoes(List<TransacaoDTO> transacoesDTO, Long idMes) {
+        return transacoesDTO.stream()
+                .map((transacaoDTO) -> {
+                    try {
+                        return this.criarTransacao(transacaoDTO, idMes);
+                    } catch (Exception e) {
+                        throw new RuntimeException(e);
+                    }
+                })
+                .toList();
     }
 
     @Override
@@ -108,7 +130,7 @@ public class TransacaoService implements ITransacaoService {
                 .toList();
     }
 
-    public static TransacaoDTO toDto(Transacao transacao){
+    public static TransacaoDTO toDto(Transacao transacao) {
 
         BancoDTO bancoDTO = BancoService.toDto(transacao.getBanco());
         ResponsavelDTO responsavelDTO = ResponsavelService.toDto(transacao.getResponsavel());

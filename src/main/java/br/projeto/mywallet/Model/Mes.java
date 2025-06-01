@@ -30,7 +30,10 @@ public class Mes {
     
     @Column(name = "ano")
     private Integer ano;
-    
+
+    @Column(name="porcentagem-investimento")
+    private Integer porcentagemInvestimento;
+
     @ManyToOne
     @JoinColumn(name = "carteira_id", nullable = false)
     @JsonIgnoreProperties
@@ -47,17 +50,19 @@ public class Mes {
         
     }
 
-    public Mes(String nome, Integer ano,Carteira carteira, List<Transacao> transacoes) {
+    public Mes(String nome, Integer ano,Integer porcentagemInvestimento,Carteira carteira, List<Transacao> transacoes) {
         this.nome = nome;
         this.ano = ano;
+        this.porcentagemInvestimento = porcentagemInvestimento;
         this.carteira = carteira;
         this.transacoes = transacoes;
     }
 
-    public Mes(Long id, String nome, Integer ano, Carteira carteira, List<Transacao> transacoes) {
+    public Mes(Long id, String nome,Integer porcentagemInvestimento, Integer ano, Carteira carteira, List<Transacao> transacoes) {
         this.id = id;
         this.nome = nome;
         this.ano = ano;
+        this.porcentagemInvestimento = porcentagemInvestimento;
         this.carteira = carteira;
         this.transacoes = transacoes;
     }
@@ -102,6 +107,12 @@ public class Mes {
     public void setTransacoes(List<Transacao> transacoes) {
         this.transacoes = transacoes;
     }
-    
-    
+
+    public Integer getPorcentagemInvestimento() {
+        return porcentagemInvestimento;
+    }
+
+    public void setPorcentagemInvestimento(Integer porcentagemInvestimento) {
+        this.porcentagemInvestimento = porcentagemInvestimento;
+    }
 }
