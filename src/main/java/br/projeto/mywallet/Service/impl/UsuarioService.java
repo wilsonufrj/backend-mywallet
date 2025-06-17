@@ -81,11 +81,21 @@ public class UsuarioService implements IUsuarioService {
                 .filter(usuario -> usuario.getNome().equals(loginDTO.getNome())
                         && usuario.getSenha().equals(loginDTO.getSenha()))
                 .findFirst()
-                .map((usuario -> new AuthenticateDTO(
-                        JwtUtil.generateToken(usuario.getNome()),
-                        usuario.getNome(),
-                        usuario.getId()
-                )))
+                .map((usuario -> {
+
+                    Long idResponsavelUsuario = usuario.getResponsaveis().stream()
+                            .filter(responsavel-> responsavel.getNome().equals(usuario.getNome()))
+                            .findFirst()
+                            .get()
+                            .getId();
+
+                    return new AuthenticateDTO(
+                            JwtUtil.generateToken(usuario.getNome()),
+                            usuario.getNome(),
+                            usuario.getId(),
+                            idResponsavelUsuario
+                    );
+                }))
                 .orElseThrow(() -> new Exception("Credenciais Inválidas"));
 
     }

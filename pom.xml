@@ -10,7 +10,7 @@
     </parent>
     <groupId>br.projeto</groupId>
     <artifactId>mywallet</artifactId>
-    <version>0.0.1</version>
+    <version>1.0.1</version>
     <name>My Wallet</name>
     <description>Backend do projeto myWallet</description>
     <properties>

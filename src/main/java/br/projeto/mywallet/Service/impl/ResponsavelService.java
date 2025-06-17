@@ -30,11 +30,11 @@ public class ResponsavelService implements IResponsavelService {
         Responsavel responsavel = new Responsavel();
         try {
 
-            Usuario usuario = usuarioRepository.findById(responsavel.getUsuario().getId())
+            Usuario usuario = usuarioRepository.findById(responsavelDTO.getUsuarioInfo().getId())
                     .orElseThrow(() -> new Exception("Usuário não encontrado"));
 
 
-            responsavel.setNome(responsavel.getNome());
+            responsavel.setNome(responsavelDTO.getNome());
             responsavel.setTransacoes(new ArrayList<>());
             responsavel.setUsuario(usuario);
             return toDto(responsavelRepository.save(responsavel));

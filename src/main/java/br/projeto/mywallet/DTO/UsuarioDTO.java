@@ -80,5 +80,4 @@ public class UsuarioDTO {
         this.carteiras = carteiras;
     }
     
-    
 }

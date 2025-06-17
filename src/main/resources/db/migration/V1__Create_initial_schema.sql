@@ -87,7 +87,7 @@ INSERT INTO banco (id, nome) VALUES (6, 'Nubank');
 SELECT setval('banco_id_seq', (SELECT MAX(id) FROM banco));
 
 -- Admin User (ID: 1)
-INSERT INTO usuario (id, nome, data_nascimento, email, senha) VALUES (1, 'Admin User', '1980-01-01', 'admin@example.com', 'admin_password');
+INSERT INTO usuario (id, nome, data_nascimento, email, senha) VALUES (1, 'Admin User', '1980-01-01', 'admin@example.com', 'admin');
 SELECT setval('usuario_id_seq', (SELECT MAX(id) FROM usuario));
 
 INSERT INTO carteira (id, nome) VALUES (1, 'Admin Wallet');

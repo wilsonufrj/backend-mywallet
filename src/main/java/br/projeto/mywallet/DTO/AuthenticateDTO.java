@@ -8,11 +8,13 @@ public class AuthenticateDTO {
     private String token;
     private String nome;
     private Long id;
+    private Long idUsuarioResponsavel;
 
-    public AuthenticateDTO(String token, String nome, Long id) {
+    public AuthenticateDTO(String token, String nome, Long id,Long idUsuarioResponsavel) {
         this.token = token;
         this.nome = nome;
         this.id = id;
+        this.idUsuarioResponsavel = idUsuarioResponsavel;
     }
 
     public String getToken() {
@@ -38,5 +40,12 @@ public class AuthenticateDTO {
     public void setId(Long id) {
         this.id = id;
     }
-    
+
+    public Long getIdUsuarioResponsavel() {
+        return idUsuarioResponsavel;
+    }
+
+    public void setIdUsuarioResponsavel(Long idUsuarioResponsavel) {
+        this.idUsuarioResponsavel = idUsuarioResponsavel;
+    }
 }
